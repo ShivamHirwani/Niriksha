@@ -1,0 +1,8 @@
+supabase
+scikit-learn
+pandas
+numpy
+joblib
+gspread 
+oauth2client
+python-dotenv
