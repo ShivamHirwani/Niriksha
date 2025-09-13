@@ -138,4 +138,29 @@ df_fees= pd.DataFrame(fees.data)
 
 
 df_attendance_info= df_attendance[['student_id','attendance_percentage' ]]
-df_assessments_info= df_assessments[['student_id', ]]
+df_assessments_info= df_assessments.drop(['assessment_id', 'q1_score', 'q2_score', 'q3_score', 'q1_max_score', 'q2_max_score', 'q3_max_score', 'date'], axis=1)
+df_fees_info= df_fees.drop(['id', 'fee_due_amount'], axis=1)
+
+df_with_nan= (df_students
+     .merge(df_attendance_info, on= 'student_id', how='left')
+     .merge(df_assessments_info, on= 'student_id', how='left')
+     .merge(df_fees_info, on= 'student_id', how='left')
+    )
+
+df_filled= df_with_nan.fillna({
+    'attendance_percentage': df_attendance_info['attendance_percentage'].mean(),
+    'q1_average_test_score': df_assessments_info['q1_average_test_score'].mean(),
+    'q2_average_test_score': df_assessments_info['q2_average_test_score'].mean(),
+    'q3_average_test_score': df_assessments_info['q3_average_test_score'].mean(),
+    'q1_test_score_trend': df_assessments_info['q1_test_score_trend'].mode(),
+    'q2_test_score_trend': df_assessments_info['q2_test_score_trend'].mode(),
+    'q3_test_score_trend': df_assessments_info['q3_test_score_trend'].mode(),
+    'q1_attempts_used': df_assessments_info['q1_attempts_used'].median(),
+    'q2_attempts_used': df_assessments_info['q2_attempts_used'].median(),
+    'q3_attempts_used': df_assessments_info['q3_attempts_used'].median(),
+    'fee_status': df_fees_info['fee_status'].mode(),
+    'fee_due_date': df_fees_info['fee_due_date'].mode()
+})
+
+
+df_filled.count
