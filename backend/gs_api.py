@@ -1,4 +1,5 @@
 import os, json
+import datetime
 import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
@@ -21,7 +22,6 @@ gc= gspread.service_account(filename= json_path)
 # sheet = gc.open("Attendance Data").worksheet("Sheet1")
 
 
-d={}
 
 for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
     sheet = gc.open(f"{sheet_name}").get_worksheet(0)
@@ -32,20 +32,22 @@ for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
 # 3. Insert into attendance table 
 # * delete every thing in  full refresh so what ever mentors will change keep maintain
 
-    if sheet_name== 'Fees':
-        supabase.table('fees').delete().neq("student_id", "").execute()
-        df = df.astype(object).where(pd.notnull(df), None)
+    if sheet_name== 'Students':
+        supabase.table('students').delete().neq("student_id", "").execute()
 
+        df = df.astype(object).where(pd.notnull(df), None)
         rows_to_insert=[]
         for _, row in df.iterrows():
             rows_to_insert.append({
-                'id':str(row['id']),
-                'student_id':int(row['student_id']),
-                'fee_status': str(row['fee_status']),
-                'fee_due_amount': int(row['fee_due_amount']),
-                'fee_due_date': int(row['fee_due_date'])
+            'student_id': str(row['student_id']),
+            'student_name': str(row['student_name']),
+            'class': str(row['class']),
+            'batch': str(row['batch']),
+            'mentor_email': str(row['mentor_email']),
+            'parent_email': str(row['parent_email']),
+            'parent_phone': str(row['parent_phone'])
             })
-        supabase.table('fees').insert(rows_to_insert)
+        supabase.table('students').insert(rows_to_insert).execute()
 
 
     elif sheet_name== 'Attendance Data':
@@ -54,19 +56,24 @@ for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
         df = df.astype(object).where(pd.notnull(df), None)
         rows_to_insert=[]
         for _, row in df.iterrows():
+            parsed_date = datetime.datetime.strptime(str(row['date']), "%d-%m-%Y").date()
+
             rows_to_insert.append({
                 'student_id':str(row['student_id']),
                 'classes_attended':int(row['classes_attended']),
                 'total_classes': int(row['total_classes']),
-                'attendance_percentage': float(row['classes_attended']/row['total_classes']*100)
+                'attendance_percentage': float(row['classes_attended']/row['total_classes']*100),
+                'date': parsed_date.isoformat()
             })
-        supabase.table('attendance').insert(rows_to_insert)
+        supabase.table('attendance').insert(rows_to_insert).execute()
     elif sheet_name== 'Assessments':
         supabase.table('assessments').delete().neq("student_id", "").execute()
         df = df.astype(object).where(pd.notnull(df), None)
 
         rows_to_insert=[]
         for _, row in df.iterrows():
+            parsed_date = datetime.datetime.strptime(str(row['date']), "%d-%m-%Y").date()
+
             rows_to_insert.append({
                 'assessment_id': str(row['assessment_id']),
                 'student_id': str(row['student_id']),
@@ -85,29 +92,50 @@ for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
                 'q1_attempts_used': int(row['q1_attempts_used']),
                 'q2_attempts_used': int(row['q2_attempts_used']),
                 'q3_attempts_used': int(row['q3_attempts_used']),
+                'date': parsed_date.isoformat()
             })
         supabase.table('assessments').insert(rows_to_insert).execute()
 
     else:
-        supabase.table('students').delete().neq("student_id", "").execute()
-
+        supabase.table('fees').delete().neq("student_id", "").execute()
         df = df.astype(object).where(pd.notnull(df), None)
+
         rows_to_insert=[]
         for _, row in df.iterrows():
             rows_to_insert.append({
-            'student_id': str(row['student_id']),
-            'student_name': str(row['student_name']),
-            'class': str(row['class']),
-            'batch': str(row['batch']),
-            'mentor_email': str(row['mentor_email']),
-            'parent_email': str(row['parent_email']),
-            'parent_phone': str(row['parent_phone'])
+                'id':str(row['id']),
+                'student_id':int(row['student_id']),
+                'fee_status': str(row['fee_status']),
+                'fee_due_amount': int(row['fee_due_amount']),
+                'fee_due_date': int(row['fee_due_date'])
             })
-        supabase.table('students').insert(rows_to_insert).execute()
-    d[sheet_name]=df
+        supabase.table('fees').insert(rows_to_insert).execute()
+
 
 
 
 model= joblib.load('Student_risk_model.pkl')
 
 
+
+
+####################### fetching table from supabase 
+#1. Fetch Students
+students= supabase.table('students').select('*').execute()
+df_students= pd.DataFrame(students.data)
+
+#2. Fetch Attendance
+attendance= supabase.table('attendance').select('*').execute()
+df_attendance= pd.DataFrame(attendance.data)
+
+#3. Fetch Assessments
+assessments= supabase.table('assessments').select('*').execute()
+df_assessments= pd.DataFrame(assessments.data)
+
+#4. Fetch Fees
+fees= supabase.table('fees').select('*').execute()
+df_fees= pd.DataFrame(fees.data)
+
+
+df_attendance_info= df_attendance[['student_id','attendance_percentage' ]]
+df_assessments_info= df_assessments[['student_id', ]]
