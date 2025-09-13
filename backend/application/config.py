@@ -4,15 +4,15 @@ load_dotenv()  # load .env values
 
 class Config():
     DEBUG = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    # SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 class LocalDevelopmentConfig(Config):
     DEBUG = True
 
     # Connect directly to Supabase Postgres
-    SQLALCHEMY_DATABASE_URI = os.getenv("CONNECTION_STR")
+    # SQLALCHEMY_DATABASE_URI = os.getenv("CONNECTION_STR")
     
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Security (for Flask-Security-Too)
     SECRET_KEY = "this-is-a-secret-key"
