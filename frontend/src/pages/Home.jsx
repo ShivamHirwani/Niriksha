@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function Home() {
+  // Simple homepage layout
   return (
     <div className="p-6">
       <main className="flex flex-col items-center justify-center text-center mt-20 space-y-6">
