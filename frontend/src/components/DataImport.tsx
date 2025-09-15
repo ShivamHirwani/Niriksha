@@ -55,14 +55,14 @@ const DataImport: React.FC = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Data Import</h1>
-        <p className="text-gray-600 mt-1">Import student data from spreadsheets and external systems</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Data Import</h1>
+        <p className="text-gray-600 dark:text-gray-400 mt-1">Import student data from spreadsheets and external systems</p>
       </div>
 
       {/* Templates Section */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Download Templates</h3>
-        <p className="text-gray-600 mb-4">
+      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Download Templates</h3>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
           Use these templates to ensure your data is formatted correctly before importing.
         </p>
         
@@ -72,17 +72,17 @@ const DataImport: React.FC = () => {
             { type: 'attendance', title: 'Attendance Records', description: 'Daily attendance tracking data' },
             { type: 'grades', title: 'Academic Records', description: 'Test scores and grade information' }
           ].map((template) => (
-            <div key={template.type} className="border border-gray-200 rounded-lg p-4">
+            <div key={template.type} className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
               <div className="flex items-center space-x-3 mb-3">
                 <FileSpreadsheet className="w-8 h-8 text-green-600" />
                 <div>
-                  <h4 className="font-medium text-gray-900">{template.title}</h4>
-                  <p className="text-sm text-gray-500">{template.description}</p>
+                  <h4 className="font-medium text-gray-900 dark:text-white">{template.title}</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{template.description}</p>
                 </div>
               </div>
               <button
                 onClick={() => downloadTemplate(template.type)}
-                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
+                className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-sm font-medium"
               >
                 <Download className="w-4 h-4" />
                 <span>Download Template</span>
@@ -93,12 +93,12 @@ const DataImport: React.FC = () => {
       </div>
 
       {/* Upload Section */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Upload Data Files</h3>
+      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Upload Data Files</h3>
         
         <div
           className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-            dragActive ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
+            dragActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-800'
           }`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -110,15 +110,15 @@ const DataImport: React.FC = () => {
               {importStatus === 'processing' ? (
                 <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto"></div>
               ) : (
-                <Upload className="w-12 h-12 text-gray-400 mx-auto" />
+                <Upload className="w-12 h-12 text-gray-400 dark:text-gray-500 mx-auto" />
               )}
             </div>
             
             {importStatus === 'idle' && (
               <>
                 <div>
-                  <p className="text-lg font-medium text-gray-900">Drop files here or click to upload</p>
-                  <p className="text-gray-500">Supports CSV, Excel (.xlsx), and JSON files</p>
+                  <p className="text-lg font-medium text-gray-900 dark:text-white">Drop files here or click to upload</p>
+                  <p className="text-gray-500 dark:text-gray-400">Supports CSV, Excel (.xlsx), and JSON files</p>
                 </div>
                 <input
                   type="file"
@@ -139,8 +139,8 @@ const DataImport: React.FC = () => {
 
             {importStatus === 'processing' && (
               <div>
-                <p className="text-lg font-medium text-gray-900">Processing files...</p>
-                <p className="text-gray-500">Please wait while we import your data</p>
+                <p className="text-lg font-medium text-gray-900 dark:text-white">Processing files...</p>
+                <p className="text-gray-500 dark:text-gray-400">Please wait while we import your data</p>
               </div>
             )}
 
@@ -148,23 +148,23 @@ const DataImport: React.FC = () => {
               <div className="space-y-4">
                 <CheckCircle className="w-12 h-12 text-green-500 mx-auto" />
                 <div>
-                  <p className="text-lg font-medium text-gray-900">Import Successful!</p>
+                  <p className="text-lg font-medium text-gray-900 dark:text-white">Import Successful!</p>
                   <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div className="bg-blue-50 p-3 rounded-lg">
-                      <p className="font-medium text-blue-900">{importResults.processed}</p>
-                      <p className="text-blue-600">Records Processed</p>
+                    <div className="bg-blue-50 dark:bg-gray-900 p-3 rounded-lg">
+                      <p className="font-medium text-blue-900 dark:text-blue-200">{importResults.processed}</p>
+                      <p className="text-blue-600 dark:text-blue-400">Records Processed</p>
                     </div>
-                    <div className="bg-green-50 p-3 rounded-lg">
-                      <p className="font-medium text-green-900">{importResults.updated}</p>
-                      <p className="text-green-600">Successfully Updated</p>
+                    <div className="bg-green-50 dark:bg-gray-900 p-3 rounded-lg">
+                      <p className="font-medium text-green-900 dark:text-green-200">{importResults.updated}</p>
+                      <p className="text-green-600 dark:text-green-400">Successfully Updated</p>
                     </div>
-                    <div className="bg-purple-50 p-3 rounded-lg">
-                      <p className="font-medium text-purple-900">{importResults.newStudents}</p>
-                      <p className="text-purple-600">New Students</p>
+                    <div className="bg-purple-50 dark:bg-gray-900 p-3 rounded-lg">
+                      <p className="font-medium text-purple-900 dark:text-purple-200">{importResults.newStudents}</p>
+                      <p className="text-purple-600 dark:text-purple-400">New Students</p>
                     </div>
-                    <div className="bg-red-50 p-3 rounded-lg">
-                      <p className="font-medium text-red-900">{importResults.errors}</p>
-                      <p className="text-red-600">Errors</p>
+                    <div className="bg-red-50 dark:bg-gray-900 p-3 rounded-lg">
+                      <p className="font-medium text-red-900 dark:text-red-200">{importResults.errors}</p>
+                      <p className="text-red-600 dark:text-red-400">Errors</p>
                     </div>
                   </div>
                 </div>
@@ -184,8 +184,8 @@ const DataImport: React.FC = () => {
       </div>
 
       {/* Import History */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Imports</h3>
+      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Recent Imports</h3>
         
         <div className="space-y-3">
           {[
@@ -193,12 +193,12 @@ const DataImport: React.FC = () => {
             { file: 'student_grades_q4.xlsx', date: '2024-01-14', status: 'success', records: 890 },
             { file: 'new_students.csv', date: '2024-01-13', status: 'error', records: 45 }
           ].map((item, index) => (
-            <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+            <div key={index} className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-800 rounded-lg">
               <div className="flex items-center space-x-3">
-                <FileSpreadsheet className="w-5 h-5 text-gray-400" />
+                <FileSpreadsheet className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                 <div>
-                  <p className="font-medium text-gray-900">{item.file}</p>
-                  <p className="text-sm text-gray-500">{item.records} records • {item.date}</p>
+                  <p className="font-medium text-gray-900 dark:text-white">{item.file}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{item.records} records • {item.date}</p>
                 </div>
               </div>
               
@@ -209,7 +209,7 @@ const DataImport: React.FC = () => {
                   <AlertTriangle className="w-5 h-5 text-red-500" />
                 )}
                 <span className={`px-2 py-1 text-xs rounded-full ${
-                  item.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  item.status === 'success' ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
                 }`}>
                   {item.status}
                 </span>
