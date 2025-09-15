@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStudentContext } from '../context/StudentContext';
+import { StudentDetail as StudentDetailType } from '../context/StudentContext';
 import { ArrowLeft, AlertTriangle, Clock, CheckCircle, Mail, Phone, FileText, Calendar } from 'lucide-react';
 
 interface StudentDetailProps {
@@ -8,9 +9,35 @@ interface StudentDetailProps {
 }
 
 const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
-  const { students, alerts } = useStudentContext();
+  const { alerts, getStudentDetail } = useStudentContext();
+  const [student, setStudent] = useState<StudentDetailType | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   
+  useEffect(() => {
+    if (!studentId) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchStudentDetail = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const detailData = await getStudentDetail(studentId);
+        setStudent(detailData);
+      } catch (err) {
+        setError('Failed to load student details');
+        console.error('Error loading student detail:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudentDetail();
+  }, [studentId, getStudentDetail]);
+
   if (!studentId) {
     return (
       <div className="text-center py-12">
@@ -19,16 +46,30 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
     );
   }
 
-  const student = students.find(s => s.id === studentId);
-  const studentAlerts = alerts.filter(a => a.studentId === studentId);
-
-  if (!student) {
+  if (loading) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Student not found</p>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="text-gray-500 mt-4">Loading student details...</p>
       </div>
     );
   }
+
+  if (error || !student) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-500">{error || 'Student not found'}</p>
+        <button
+          onClick={onBack}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
+  const studentAlerts = alerts.filter(a => a.studentId === studentId);
 
   const getRiskIcon = (level: string) => {
     switch (level) {
@@ -69,6 +110,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">{student.name}</h1>
           <p className="text-gray-600">Student ID: {student.studentId} • {student.program}</p>
+          <p className="text-sm text-gray-500">Class: {student.class} • Batch: {student.batch}</p>
         </div>
         <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg border ${riskColorClass}`}>
           <RiskIcon className="w-5 h-5" />
@@ -92,7 +134,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
         </div>
         <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
           <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600">{student.currentGPA}</p>
+            <p className="text-2xl font-bold text-purple-600">{student.currentGPA.toFixed(2)}</p>
             <p className="text-sm text-gray-500">Current GPA</p>
           </div>
         </div>
@@ -138,13 +180,24 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                     <Phone className="w-4 h-4 text-gray-400" />
                     <span className="text-gray-700">{student.phone}</span>
                   </div>
+                  <div className="flex items-center space-x-3">
+                    <Mail className="w-4 h-4 text-gray-400" />
+                    <div>
+                      <span className="text-gray-700">Mentor: {student.mentorEmail}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <h4 className="text-md font-semibold text-gray-900 mt-6 mb-3">Emergency Contact</h4>
+                <h4 className="text-md font-semibold text-gray-900 mt-6 mb-3">Parent Contact</h4>
                 <div className="space-y-2">
-                  <p className="text-gray-700">{student.emergencyContact.name}</p>
-                  <p className="text-gray-600 text-sm">{student.emergencyContact.relationship}</p>
-                  <p className="text-gray-600 text-sm">{student.emergencyContact.phone}</p>
+                  <div className="flex items-center space-x-3">
+                    <Mail className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-700">{student.parentEmail}</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Phone className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-700">{student.parentPhone}</span>
+                  </div>
                 </div>
               </div>
 
@@ -155,7 +208,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <span className="text-gray-700">{factor.factor}</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">{factor.weight * 100}% weight</span>
+                        <span className="text-sm text-gray-500">{Math.round(factor.weight * 100)}% weight</span>
                         <span className={`px-2 py-1 text-xs rounded ${
                           factor.severity === 'high' ? 'bg-red-100 text-red-800' :
                           factor.severity === 'medium' ? 'bg-yellow-100 text-yellow-800' :
@@ -194,7 +247,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                             subject.grade >= 60 ? 'text-yellow-600' :
                             'text-red-600'
                           }`}>
-                            {subject.grade}%
+                            {subject.grade.toFixed(1)}%
                           </span>
                         </td>
                         <td className="py-3 px-4 text-gray-600">{subject.attempts}/3</td>
@@ -218,6 +271,22 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
           {activeTab === 'attendance' && (
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Attendance Record</h3>
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-md font-medium text-gray-700">Overall Attendance: {student.attendanceRate}%</h4>
+                  <div className="flex items-center space-x-4 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 bg-green-100 rounded"></div>
+                      <span className="text-gray-600">Present ({Math.round(student.attendanceRate)}%)</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 bg-red-100 rounded"></div>
+                      <span className="text-gray-600">Absent ({Math.round(100 - student.attendanceRate)}%)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
               <div className="grid grid-cols-7 gap-2 mb-4">
                 {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
                   <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
@@ -226,27 +295,19 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                 ))}
                 
                 {/* Sample attendance grid for current month */}
-                {Array.from({ length: 30 }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium ${
-                      Math.random() > 0.2 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}
-                  >
-                    {i + 1}
-                  </div>
-                ))}
-              </div>
-              
-              <div className="flex items-center space-x-4 text-sm">
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 bg-green-100 rounded"></div>
-                  <span className="text-gray-600">Present</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-4 h-4 bg-red-100 rounded"></div>
-                  <span className="text-gray-600">Absent</span>
-                </div>
+                {Array.from({ length: 30 }, (_, i) => {
+                  const isPresent = Math.random() * 100 < student.attendanceRate;
+                  return (
+                    <div
+                      key={i}
+                      className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium ${
+                        isPresent ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                      }`}
+                    >
+                      {i + 1}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}
