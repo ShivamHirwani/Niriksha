@@ -17,10 +17,10 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewStudent }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-gray-600 mt-1">Monitor student risk levels and early warning indicators</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Overview</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Monitor student risk levels and early warning indicators</p>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-500 dark:text-gray-400">
           Last updated: {new Date().toLocaleString()}
         </div>
       </div>
