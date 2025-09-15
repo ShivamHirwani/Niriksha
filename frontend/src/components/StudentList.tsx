@@ -1,10 +1,11 @@
+
 import React, { useState } from 'react';
 import { useStudentContext } from '../context/StudentContext';
 import { Search, AlertTriangle, Clock, CheckCircle, Eye, Filter, Download, Plus } from 'lucide-react';
 
 // Step 1: This is our main StudentList component
 // It's like a full page that shows all students in a big table
-const StudentList = ({ onSelectStudent }) => {
+const StudentList = () => {
   // Step 2: Get student data from our context (the data storage)
   const { students, loading, error } = useStudentContext();
   
@@ -14,6 +15,7 @@ const StudentList = ({ onSelectStudent }) => {
   const [filterProgram, setFilterProgram] = useState('all'); // Which program to show
   const [sortBy, setSortBy] = useState('name'); // How to sort the table
   const [sortOrder, setSortOrder] = useState('asc'); // Ascending or descending
+  const [selectedStudentId, setSelectedStudentId] = useState(null); // Which student is selected
 
   // Step 4: Filter and sort the students based on user choices
   const filteredAndSortedStudents = students
@@ -44,9 +46,8 @@ const StudentList = ({ onSelectStudent }) => {
           bValue = b['Attendance%'];
           break;
         case 'risk':
-          const riskOrder = { 'high': 3, 'medium': 2, 'low': 1 };
-          aValue = riskOrder[a.riskLevel];
-          bValue = riskOrder[b.riskLevel];
+          aValue = a.riskLevel;
+          bValue = b.riskLevel;
           break;
         default:
           aValue = a.name;
@@ -72,11 +73,19 @@ const StudentList = ({ onSelectStudent }) => {
     }
   };
 
+  const getRiskColor = (level) => {
+    switch (level) {
+      case 'high': return 'text-red-600';
+      case 'medium': return 'text-yellow-600';
+      default: return 'text-green-600';
+    }
+  };
+
   const getRiskBadgeColor = (level) => {
     switch (level) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-200 dark:border-yellow-700';
-      default: return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-700';
+      case 'high': return 'bg-red-100 text-red-800 border-red-200';
+      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      default: return 'bg-green-100 text-green-800 border-green-200';
     }
   };
 
@@ -95,9 +104,11 @@ const StudentList = ({ onSelectStudent }) => {
   // Step 8: Show loading state while data is being fetched
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="text-gray-600 dark:text-gray-400 mt-4">Loading students...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="text-gray-600 mt-4">Loading students...</p>
+        </div>
       </div>
     );
   }
@@ -105,204 +116,252 @@ const StudentList = ({ onSelectStudent }) => {
   // Step 9: Show error state if there's a problem loading data
   if (error) {
     return (
-      <div className="text-center py-12">
-        <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-        <p className="text-red-600 text-lg font-medium">Error loading student data</p>
-        <p className="text-gray-600 dark:text-gray-400 mt-2">{error}</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <p className="text-red-600 text-lg font-medium">Error loading student data</p>
+          <p className="text-gray-600 mt-2">{error}</p>
+        </div>
       </div>
     );
   }
 
   // Step 10: Main component return - this is what shows on screen
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Student List</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">
-          Manage and monitor all students ({filteredAndSortedStudents.length} of {students.length} shown)
-        </p>
+      <div className="bg-white shadow-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Student List</h1>
+              <p className="text-gray-600 mt-1">
+                Manage and monitor all students ({filteredAndSortedStudents.length} of {students.length} shown)
+              </p>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button className="flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </button>
+              <button className="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Student
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Filters and Search Section */}
-      <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
-        <div className="flex items-center space-x-4 mb-4">
-          <Filter className="w-5 h-5 text-gray-400" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">Filters & Search</h3>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* Search Input */}
-          <div className="relative md:col-span-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search by name or ID..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-            />
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="flex items-center space-x-4 mb-4">
+            <Filter className="w-5 h-5 text-gray-400" />
+            <h3 className="text-lg font-medium text-gray-900">Filters & Search</h3>
           </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
 
-          {/* Risk Level Filter */}
-          <select
-            value={filterRisk}
-            onChange={(e) => setFilterRisk(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-          >
-            <option value="all">All Risk Levels</option>
-            <option value="high">High Risk</option>
-            <option value="medium">Medium Risk</option>
-            <option value="low">Low Risk</option>
-          </select>
+            {/* Risk Level Filter */}
+            <select
+              value={filterRisk}
+              onChange={(e) => setFilterRisk(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            >
+              <option value="all">All Risk Levels</option>
+              <option value="high">High Risk</option>
+              <option value="medium">Medium Risk</option>
+              <option value="low">Low Risk</option>
+            </select>
 
-          {/* Program Filter */}
-          <select
-            value={filterProgram}
-            onChange={(e) => setFilterProgram(e.target.value)}
-            className="px-4 py-2 border border-gray-300 dark:border-gray-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-          >
-            <option value="all">All Programs</option>
-            {uniquePrograms.map(program => (
-              <option key={program} value={program}>{program}</option>
-            ))}
-          </select>
+            {/* Program Filter */}
+            <select
+              value={filterProgram}
+              onChange={(e) => setFilterProgram(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            >
+              <option value="all">All Programs</option>
+              {uniquePrograms.map(program => (
+                <option key={program} value={program}>{program}</option>
+              ))}
+            </select>
+
+            {/* Sort By */}
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+            >
+              <option value="name">Sort by Name</option>
+              <option value="attendance">Sort by Attendance</option>
+              <option value="risk">Sort by Risk Level</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      {/* Students Table */}
-      <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            {/* Table Header */}
-            <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
-              <tr>
-                <th
-                  onClick={() => handleSort('name')}
-                  className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Student {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Program
-                </th>
-                <th
-                  onClick={() => handleSort('attendance')}
-                  className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Attendance {sortBy === 'attendance' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th
-                  onClick={() => handleSort('risk')}
-                  className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
-                >
-                  Risk Level {sortBy === 'risk' && (sortOrder === 'asc' ? '↑' : '↓')}
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Fee Status
-                </th>
-                <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
+        {/* Students Table */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              {/* Table Header */}
+              <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th 
+                    onClick={() => handleSort('name')}
+                    className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  >
+                    Student {sortBy === 'name' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Program
+                  </th>
+                  <th 
+                    onClick={() => handleSort('attendance')}
+                    className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  >
+                    Attendance {sortBy === 'attendance' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Quiz Scores
+                  </th>
+                  <th 
+                    onClick={() => handleSort('risk')}
+                    className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                  >
+                    Risk Level {sortBy === 'risk' && (sortOrder === 'asc' ? '↑' : '↓')}
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Fee Status
+                  </th>
+                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
 
-            {/* Table Body */}
-            <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
-              {filteredAndSortedStudents.map((student) => {
-                const RiskIcon = getRiskIcon(student.riskLevel);
-                const riskBadgeColor = getRiskBadgeColor(student.riskLevel);
-
-                return (
-                  <tr key={student.id} className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors">
-                    {/* Student Info Column */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-blue-100 dark:bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-sm font-medium text-blue-600 dark:text-blue-300">
-                            {student.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+              {/* Table Body */}
+              <tbody className="divide-y divide-gray-200">
+                {filteredAndSortedStudents.map((student) => {
+                  const RiskIcon = getRiskIcon(student.riskLevel);
+                  const riskColor = getRiskColor(student.riskLevel);
+                  const riskBadgeColor = getRiskBadgeColor(student.riskLevel);
+                  
+                  return (
+                    <tr key={student.id} className="hover:bg-gray-50 transition-colors">
+                      {/* Student Info Column */}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span className="text-sm font-medium text-blue-600">
+                              {student.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-gray-900">{student.name}</p>
+                            <p className="text-sm text-gray-500">ID: {student.studentId}</p>
+                          </div>
+                        </div>
+                      </td>
+                      
+                      {/* Program Column */}
+                      <td className="px-6 py-4">
+                        <span className="text-sm text-gray-900">{student.program}</span>
+                      </td>
+                      
+                      {/* Attendance Column */}
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex items-center justify-center">
+                          <span className={`text-sm font-medium ${
+                            student['Attendance%'] >= 90 ? 'text-green-600' :
+                            student['Attendance%'] >= 75 ? 'text-yellow-600' : 'text-red-600'
+                          }`}>
+                            {student['Attendance%']}%
                           </span>
                         </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900 dark:text-white">{student.name}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400">ID: {student.studentId}</p>
+                      </td>
+                      
+                      {/* Quiz Scores Column */}
+                      <td className="px-6 py-4 text-center">
+                        <div className="text-xs space-y-1">
+                          <div className="flex justify-center space-x-2">
+                            <span className="text-gray-600">Q1: {student.q1_avg_score}</span>
+                            <span className="text-gray-600">Q2: {student.q2_avg_score}</span>
+                            <span className="text-gray-600">Q3: {student.q3_avg_score}</span>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-
-                    {/* Program Column */}
-                    <td className="px-6 py-4">
-                      <span className="text-sm text-gray-900 dark:text-gray-300">{student.program}</span>
-                    </td>
-
-                    {/* Attendance Column */}
-                    <td className="px-6 py-4 text-center">
-                      <div className="flex items-center justify-center">
-                        <span className={`text-sm font-medium ${
-                          student['Attendance%'] >= 90 ? 'text-green-600 dark:text-green-400' :
-                          student['Attendance%'] >= 75 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
-                        }`}>
-                          {student['Attendance%']}%
+                      </td>
+                      
+                      {/* Risk Level Column */}
+                      <td className="px-6 py-4 text-center">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${riskBadgeColor}`}>
+                          <RiskIcon className="w-3 h-3 mr-1" />
+                          {student.riskLevel}
                         </span>
-                      </div>
-                    </td>
+                      </td>
+                      
+                      {/* Fee Status Column */}
+                      <td className="px-6 py-4 text-center">
+                        <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                          student.Fee_Paid === 100 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {student.Fee_Paid === 100 ? 'Paid' : 'Pending'}
+                        </span>
+                      </td>
+                      
+                      {/* Actions Column */}
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => handleViewStudent(student.id)}
+                          className="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                        >
+                          <Eye className="w-3 h-3 mr-1" />
+                          View Details
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-                    {/* Risk Level Column */}
-                    <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${riskBadgeColor}`}>
-                        <RiskIcon className="w-3 h-3 mr-1" />
-                        {student.riskLevel}
-                      </span>
-                    </td>
-
-                    {/* Fee Status Column */}
-                    <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        student.Fee_Paid === 100 ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
-                      }`}>
-                        {student.Fee_Paid === 100 ? 'Paid' : 'Pending'}
-                      </span>
-                    </td>
-
-                    {/* Actions Column */}
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => onSelectStudent(student.id)}
-                        className="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-md transition-colors"
-                      >
-                        <Eye className="w-3 h-3 mr-1" />
-                        View Details
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          {/* Empty State */}
+          {filteredAndSortedStudents.length === 0 && (
+            <div className="text-center py-12">
+              <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <p className="text-lg font-medium text-gray-900">No students found</p>
+              <p className="text-gray-500">Try adjusting your search or filters</p>
+            </div>
+          )}
         </div>
 
-        {/* Empty State */}
-        {filteredAndSortedStudents.length === 0 && (
-          <div className="text-center py-12">
-            <Search className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-            <p className="text-lg font-medium text-gray-900 dark:text-white">No students found</p>
-            <p className="text-gray-500 dark:text-gray-400">Try adjusting your search or filters</p>
+        {/* Pagination Footer */}
+        <div className="bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-between">
+          <p className="text-sm text-gray-700">
+            Showing {filteredAndSortedStudents.length} of {students.length} students
+          </p>
+          <div className="flex space-x-2">
+            <button className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50">
+              Previous
+            </button>
+            <button className="px-3 py-1 text-sm text-gray-500 hover:text-gray-700 disabled:opacity-50">
+              Next
+            </button>
           </div>
-        )}
-      </div>
-
-      {/* Pagination Footer */}
-      <div className="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between rounded-b-lg">
-        <p className="text-sm text-gray-700 dark:text-gray-300">
-          Showing {filteredAndSortedStudents.length} of {students.length} students
-        </p>
-        <div className="flex space-x-2">
-          <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-50">
-            Previous
-          </button>
-          <button className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 disabled:opacity-50">
-            Next
-          </button>
         </div>
       </div>
     </div>

@@ -27,30 +27,28 @@ const Settings: React.FC = () => {
     alert('Settings saved successfully!');
   };
 
-  const inputClasses = "w-full px-3 py-2 border border-gray-300 dark:border-gray-800 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-900 text-gray-900 dark:text-white";
-
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">System Settings</h1>
-        <p className="text-gray-600 dark:text-gray-400 mt-1">Configure risk thresholds, notifications, and system preferences</p>
+        <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
+        <p className="text-gray-600 mt-1">Configure risk thresholds, notifications, and system preferences</p>
       </div>
 
       {/* Risk Thresholds */}
-      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div className="flex items-center space-x-2 mb-4">
           <AlertTriangle className="w-5 h-5 text-orange-600" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Risk Assessment Thresholds</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Risk Assessment Thresholds</h3>
         </div>
         
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Attendance Rate (%)
             </label>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">High Risk (below)</label>
+                <label className="block text-xs text-gray-500 mb-1">High Risk (below)</label>
                 <input
                   type="number"
                   value={riskThresholds.attendance.high}
@@ -58,11 +56,11 @@ const Settings: React.FC = () => {
                     ...prev,
                     attendance: { ...prev.attendance, high: parseInt(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Medium Risk (below)</label>
+                <label className="block text-xs text-gray-500 mb-1">Medium Risk (below)</label>
                 <input
                   type="number"
                   value={riskThresholds.attendance.medium}
@@ -70,19 +68,19 @@ const Settings: React.FC = () => {
                     ...prev,
                     attendance: { ...prev.attendance, medium: parseInt(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               GPA Threshold
             </label>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">High Risk (below)</label>
+                <label className="block text-xs text-gray-500 mb-1">High Risk (below)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -91,11 +89,11 @@ const Settings: React.FC = () => {
                     ...prev,
                     gpa: { ...prev.gpa, high: parseFloat(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Medium Risk (below)</label>
+                <label className="block text-xs text-gray-500 mb-1">Medium Risk (below)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -104,19 +102,19 @@ const Settings: React.FC = () => {
                     ...prev,
                     gpa: { ...prev.gpa, medium: parseFloat(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Subject Attempts
             </label>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">High Risk (at/above)</label>
+                <label className="block text-xs text-gray-500 mb-1">High Risk (at/above)</label>
                 <input
                   type="number"
                   value={riskThresholds.attempts.high}
@@ -124,11 +122,11 @@ const Settings: React.FC = () => {
                     ...prev,
                     attempts: { ...prev.attempts, high: parseInt(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">Medium Risk (at/above)</label>
+                <label className="block text-xs text-gray-500 mb-1">Medium Risk (at/above)</label>
                 <input
                   type="number"
                   value={riskThresholds.attempts.medium}
@@ -136,7 +134,7 @@ const Settings: React.FC = () => {
                     ...prev,
                     attempts: { ...prev.attempts, medium: parseInt(e.target.value) }
                   }))}
-                  className={inputClasses}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
@@ -145,20 +143,20 @@ const Settings: React.FC = () => {
       </div>
 
       {/* Notification Settings */}
-      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div className="flex items-center space-x-2 mb-4">
           <Bell className="w-5 h-5 text-blue-600" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Notification Preferences</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Notification Preferences</h3>
         </div>
         
         <div className="space-y-4">
           {Object.entries(notifications).map(([key, value]) => (
             <div key={key} className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                <p className="text-sm font-medium text-gray-900">
                   {key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-xs text-gray-500">
                   {key === 'email' && 'Send alerts and reports via email'}
                   {key === 'sms' && 'Send critical alerts via SMS'}
                   {key === 'pushNotifications' && 'Browser push notifications'}
@@ -173,7 +171,7 @@ const Settings: React.FC = () => {
                   onChange={(e) => setNotifications(prev => ({ ...prev, [key]: e.target.checked }))}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
               </label>
             </div>
           ))}
@@ -181,17 +179,17 @@ const Settings: React.FC = () => {
       </div>
 
       {/* System Settings */}
-      <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
         <div className="flex items-center space-x-2 mb-4">
           <Shield className="w-5 h-5 text-green-600" />
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">System Configuration</h3>
+          <h3 className="text-lg font-semibold text-gray-900">System Configuration</h3>
         </div>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">Automatic Backup</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">Enable daily automatic data backups</p>
+              <p className="text-sm font-medium text-gray-900">Automatic Backup</p>
+              <p className="text-xs text-gray-500">Enable daily automatic data backups</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
@@ -200,43 +198,43 @@ const Settings: React.FC = () => {
                 onChange={(e) => setSystemSettings(prev => ({ ...prev, autoBackup: e.target.checked }))}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
             </label>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Data Retention Period (days)
             </label>
             <input
               type="number"
               value={systemSettings.dataRetention}
               onChange={(e) => setSystemSettings(prev => ({ ...prev, dataRetention: parseInt(e.target.value) }))}
-              className={inputClasses}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Session Timeout (minutes)
             </label>
             <input
               type="number"
               value={systemSettings.sessionTimeout}
               onChange={(e) => setSystemSettings(prev => ({ ...prev, sessionTimeout: parseInt(e.target.value) }))}
-              className={inputClasses}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Max Login Attempts
             </label>
             <input
               type="number"
               value={systemSettings.maxLoginAttempts}
               onChange={(e) => setSystemSettings(prev => ({ ...prev, maxLoginAttempts: parseInt(e.target.value) }))}
-              className={inputClasses}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
         </div>
