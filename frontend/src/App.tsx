@@ -7,14 +7,12 @@ import DataImport from './components/DataImport';
 import Settings from './components/Settings';
 import Header from './components/Header';
 import { StudentProvider } from './context/StudentContext';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
 
-function AppContent() {
+function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [activeView, setActiveView] = useState('dashboard');
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
-  const { theme } = useTheme();
 
   const handleLogin = (credentials: { username: string; password: string }) => {
     // Simple demo authentication - in real app, this would validate against backend
@@ -67,29 +65,20 @@ function AppContent() {
   };
 
   return (
-    <div className={`${theme} min-h-screen bg-gray-50 dark:bg-black`}>
-      <Header
-        activeView={activeView}
-        onViewChange={setActiveView}
-        user={user}
-        onLogout={handleLogout}
-      />
-      <main className="container mx-auto px-4 py-6">
-        {renderContent()}
-      </main>
-    </div>
-  );
-}
-
-function App() {
-  return (
     <StudentProvider>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
+      <div className="min-h-screen bg-gray-50">
+        <Header 
+          activeView={activeView} 
+          onViewChange={setActiveView}
+          user={user}
+          onLogout={handleLogout}
+        />
+        <main className="container mx-auto px-4 py-6">
+          {renderContent()}
+        </main>
+      </div>
     </StudentProvider>
   );
 }
-
 
 export default App;

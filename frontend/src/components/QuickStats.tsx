@@ -46,12 +46,12 @@ const QuickStats: React.FC = () => {
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <div key={stat.title} className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+          <div key={stat.title} className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{stat.title}</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{stat.value}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{stat.trend}</p>
+                <p className="text-sm font-medium text-gray-600">{stat.title}</p>
+                <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+                <p className="text-xs text-gray-500 mt-1">{stat.trend}</p>
               </div>
               <div className={`${stat.color} p-3 rounded-lg`}>
                 <Icon className="w-6 h-6 text-white" />

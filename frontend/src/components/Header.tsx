@@ -1,6 +1,5 @@
 import React from 'react';
-import { GraduationCap, BarChart3, Users, Upload, Settings, LogOut, User, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { GraduationCap, BarChart3, Users, Upload, Settings, LogOut, User } from 'lucide-react';
 
 interface HeaderProps {
   activeView: string;
@@ -10,8 +9,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogout }) => {
-  const { theme, toggleTheme } = useTheme();
-
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'students', label: 'Students', icon: Users },
@@ -20,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
   ];
 
   return (
-    <header className="bg-white dark:bg-black shadow-sm border-b border-gray-200 dark:border-gray-800">
+    <header className="bg-white shadow-sm border-b border-gray-200">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-3">
@@ -28,8 +25,8 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">EduWatch</h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Dropout Prediction System</p>
+              <h1 className="text-xl font-bold text-gray-900">EduWatch</h1>
+              <p className="text-sm text-gray-500">Dropout Prediction System</p>
             </div>
           </div>
           
@@ -42,8 +39,8 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                   onClick={() => onViewChange(item.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
                     activeView === item.id
-                      ? 'bg-blue-100 text-blue-700 dark:bg-gray-900 dark:text-blue-200 font-medium'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                      ? 'bg-blue-100 text-blue-700 font-medium'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -55,16 +52,10 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           
           {user && (
             <div className="flex items-center space-x-4">
-               <button
-                onClick={toggleTheme}
-                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              >
-                {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-              </button>
-              <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-300">
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
                 <User className="w-4 h-4" />
                 <span>{user.email}</span>
-                <span className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-gray-900 dark:text-blue-200 rounded-full text-xs font-medium capitalize">
+                <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium capitalize">
                   {user.role}
                 </span>
               </div>
@@ -72,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
               {onLogout && (
                 <button
                   onClick={onLogout}
-                  className="flex items-center space-x-1 px-3 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="flex items-center space-x-1 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>
