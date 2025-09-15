@@ -1,8 +1,10 @@
 import React from 'react';
 import { useStudentContext } from '../context/StudentContext';
+import { useTheme } from '../context/ThemeContext';
 
 const TrendChart: React.FC = () => {
   const { students } = useStudentContext();
+  const { theme } = useTheme();
 
   // Generate trend data for the last 8 weeks
   const weeks = Array.from({ length: 8 }, (_, i) => `Week ${i + 1}`);
@@ -12,20 +14,20 @@ const TrendChart: React.FC = () => {
   const maxValue = Math.max(...highRiskTrend, ...mediumRiskTrend);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-white dark:bg-black p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Risk Level Trends</h3>
-          <p className="text-sm text-gray-600">Weekly progression of at-risk students</p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Risk Level Trends</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Weekly progression of at-risk students</p>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-            <span className="text-sm text-gray-600">High Risk</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">High Risk</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-            <span className="text-sm text-gray-600">Medium Risk</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">Medium Risk</span>
           </div>
         </div>
       </div>
@@ -40,7 +42,7 @@ const TrendChart: React.FC = () => {
               y1={50 + i * 40}
               x2="750"
               y2={50 + i * 40}
-              stroke="#f3f4f6"
+              stroke={theme === 'dark' ? '#1f2937' : '#f3f4f6'}
               strokeWidth="1"
             />
           ))}
@@ -52,9 +54,9 @@ const TrendChart: React.FC = () => {
               x="45"
               y={55 + i * 40}
               textAnchor="end"
-              className="text-xs fill-gray-500"
+              className="text-xs fill-gray-500 dark:fill-gray-400"
             >
-              {maxValue - (i * maxValue / 4)}
+              {Math.round(maxValue - (i * maxValue / 4))}
             </text>
           ))}
 
@@ -86,6 +88,8 @@ const TrendChart: React.FC = () => {
               cy={210 - (value / maxValue) * 160}
               r="4"
               fill="#ef4444"
+              stroke={theme === 'dark' ? 'black' : 'white'}
+              strokeWidth="2"
             />
           ))}
           
@@ -96,6 +100,8 @@ const TrendChart: React.FC = () => {
               cy={210 - (value / maxValue) * 160}
               r="4"
               fill="#eab308"
+              stroke={theme === 'dark' ? 'black' : 'white'}
+              strokeWidth="2"
             />
           ))}
 
@@ -106,7 +112,7 @@ const TrendChart: React.FC = () => {
               x={100 + i * 85}
               y={235}
               textAnchor="middle"
-              className="text-xs fill-gray-500"
+              className="text-xs fill-gray-500 dark:fill-gray-400"
             >
               {week}
             </text>
