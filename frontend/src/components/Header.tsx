@@ -16,8 +16,8 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
     { id: 'students', label: 'Students', icon: Users },
     { id: 'import', label: 'Data Import', icon: Upload },
-    { id: 'settings', label: 'Settings', icon: Settings },
     { id: 'report', label: 'Report', icon: FileText }, // ✅ New Report link
+    { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   return (
@@ -42,8 +42,8 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                   key={item.id}
                   onClick={() => onViewChange(item.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${activeView === item.id
-                      ? 'bg-blue-100 text-blue-700 dark:bg-gray-900 dark:text-blue-200 font-medium'
-                      : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'bg-blue-100 text-blue-700 dark:bg-gray-900 dark:text-blue-200 font-medium'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                 >
                   <Icon className="w-4 h-4" />
