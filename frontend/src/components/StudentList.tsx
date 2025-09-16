@@ -7,7 +7,7 @@ import { Search, AlertTriangle, Clock, CheckCircle, Eye, Filter, Download, Plus 
 const StudentList = ({ onSelectStudent }) => {
   // Step 2: Get student data from our context (the data storage)
   const { students, loading, error } = useStudentContext();
-  
+
   // Step 3: useState hooks - like memory boxes for things that can change
   const [searchTerm, setSearchTerm] = useState(''); // What user types in search
   const [filterRisk, setFilterRisk] = useState('all'); // Which risk level to show
@@ -20,21 +20,21 @@ const StudentList = ({ onSelectStudent }) => {
     .filter(student => {
       // Check if student matches search term (name or ID)
       const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           student.studentId.toLowerCase().includes(searchTerm.toLowerCase());
-      
+        student.studentId.toLowerCase().includes(searchTerm.toLowerCase());
+
       // Check if student matches risk filter
       const matchesRiskFilter = filterRisk === 'all' || student.riskLevel === filterRisk;
-      
+
       // Check if student matches program filter
       const matchesProgramFilter = filterProgram === 'all' || student.program === filterProgram;
-      
+
       return matchesSearch && matchesRiskFilter && matchesProgramFilter;
     })
     .sort((a, b) => {
       // Sort students based on selected column
       let aValue, bValue;
-      
-      switch(sortBy) {
+
+      switch (sortBy) {
         case 'name':
           aValue = a.name;
           bValue = b.name;
@@ -52,7 +52,7 @@ const StudentList = ({ onSelectStudent }) => {
           aValue = a.name;
           bValue = b.name;
       }
-      
+
       if (typeof aValue === 'string') {
         return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
       } else {
@@ -238,10 +238,9 @@ const StudentList = ({ onSelectStudent }) => {
                     {/* Attendance Column */}
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <span className={`text-sm font-medium ${
-                          student['Attendance%'] >= 90 ? 'text-green-600 dark:text-green-400' :
-                          student['Attendance%'] >= 75 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
-                        }`}>
+                        <span className={`text-sm font-medium ${student['Attendance%'] >= 90 ? 'text-green-600 dark:text-green-400' :
+                            student['Attendance%'] >= 75 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
+                          }`}>
                           {student['Attendance%']}%
                         </span>
                       </div>
@@ -257,9 +256,8 @@ const StudentList = ({ onSelectStudent }) => {
 
                     {/* Fee Status Column */}
                     <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                        student.Fee_Paid === 100 ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
-                      }`}>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${student.Fee_Paid === 100 ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
+                        }`}>
                         {student.Fee_Paid === 100 ? 'Paid' : 'Pending'}
                       </span>
                     </td>

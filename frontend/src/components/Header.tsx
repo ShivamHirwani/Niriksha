@@ -1,5 +1,5 @@
 import React from 'react';
-import { GraduationCap, BarChart3, Users, Upload, Settings, LogOut, User, Sun, Moon } from 'lucide-react';
+import { GraduationCap, BarChart3, Users, Upload, Settings, LogOut, User, Sun, Moon, FileText } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 interface HeaderProps {
@@ -17,6 +17,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
     { id: 'students', label: 'Students', icon: Users },
     { id: 'import', label: 'Data Import', icon: Upload },
     { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'report', label: 'Report', icon: FileText }, // ✅ New Report link
   ];
 
   return (
@@ -32,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
               <p className="text-sm text-gray-500 dark:text-gray-400">Dropout Prediction System</p>
             </div>
           </div>
-          
+
           <nav className="flex space-x-1">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -40,11 +41,10 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                 <button
                   key={item.id}
                   onClick={() => onViewChange(item.id)}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    activeView === item.id
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${activeView === item.id
                       ? 'bg-blue-100 text-blue-700 dark:bg-gray-900 dark:text-blue-200 font-medium'
                       : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                    }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
@@ -52,10 +52,10 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
               );
             })}
           </nav>
-          
+
           {user && (
             <div className="flex items-center space-x-4">
-               <button
+              <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                   {user.role}
                 </span>
               </div>
-              
+
               {onLogout && (
                 <button
                   onClick={onLogout}

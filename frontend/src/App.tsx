@@ -6,6 +6,7 @@ import StudentDetail from './components/StudentDetail';
 import DataImport from './components/DataImport';
 import Settings from './components/Settings';
 import Header from './components/Header';
+import Report from './components/Report';
 import { StudentProvider } from './context/StudentContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
@@ -20,8 +21,8 @@ function AppContent() {
     // Simple demo authentication - in real app, this would validate against backend
     setUser({
       email: credentials.username,
-      role: credentials.username.includes('admin') ? 'admin' : 
-            credentials.username.includes('counselor') ? 'counselor' : 'teacher'
+      role: credentials.username.includes('admin') ? 'admin' :
+        credentials.username.includes('counselor') ? 'counselor' : 'teacher'
     });
     setIsAuthenticated(true);
   };
@@ -50,12 +51,15 @@ function AppContent() {
           setActiveView('student-detail');
         }} />;
       case 'student-detail':
-        return <StudentDetail 
-          studentId={selectedStudent} 
-          onBack={() => setActiveView('students')} 
+        return <StudentDetail
+          studentId={selectedStudent}
+          onBack={() => setActiveView('students')}
         />;
       case 'import':
         return <DataImport />;
+
+      case 'report':
+        return <Report />;
       case 'settings':
         return <Settings />;
       default:
