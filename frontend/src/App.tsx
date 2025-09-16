@@ -163,7 +163,8 @@ function AppContent() {
       )}
       
       <main className="w-full px-6 lg:px-8 py-8 min-h-screen">
-        <div className="w-full max-w-none">
+        {/* Added max-w-7xl for better content alignment */}
+        <div className="max-w-7xl mx-auto w-full">
           {renderContent()}
         </div>
       </main>

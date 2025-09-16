@@ -290,20 +290,23 @@ Best regards,
                   disabled={isLoading}
                   className={`inline-flex items-center gap-2 px-8 py-3 rounded-lg font-medium transition-all ${isLoading
                     ? 'cursor-not-allowed'
-                    : 'text-white hover:shadow-md active:transform active:scale-95'
+                    : 'text-white hover:shadow-xs active:transform active:scale-99'
                     }`}
                   style={{
-                    background: isLoading 
+                    backgroundColor: isLoading 
                       ? 'var(--bg-tertiary)' 
-                      : 'var(--gradient-primary)',
+                      : '#3b82f6', // Using a solid color instead of gradient for better visibility
                     color: isLoading 
                       ? 'var(--text-muted)' 
-                      : 'var(--text-inverse)'
+                      : 'white',
+                    border: isLoading 
+                      ? '1px solid var(--border-primary)' 
+                      : 'none'
                   }}
                 >
                   {isLoading ? (
                     <>
-                      <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--text-inverse)' }} />
+                      <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#ffffff' }} />
                       Sending Email...
                     </>
                   ) : (

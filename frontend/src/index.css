@@ -69,6 +69,7 @@
   --border-secondary: #cbd5e1;
   --border-focus: #3b82f6;
   
+  --shadow-xs: 0 1px 1px 0 rgb(0 0 0 / 0.03);
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -98,6 +99,7 @@
   --border-secondary: #404040;
   --border-focus: #8b5cf6;
   
+  --shadow-xs: 0 1px 1px 0 rgb(255 255 255 / 0.03);
   --shadow-sm: 0 1px 2px 0 rgb(255 255 255 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(255 255 255 / 0.1), 0 2px 4px -2px rgb(255 255 255 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(255 255 255 / 0.1), 0 4px 6px -4px rgb(255 255 255 / 0.1);
@@ -219,6 +221,10 @@ body {
   background: var(--gradient-success);
 }
 
+.shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+
 .shadow-modern {
   box-shadow: var(--shadow-lg);
 }
@@ -286,8 +292,8 @@ body {
 }
 
 .hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-0.5px);
+  box-shadow: var(--shadow-md);
 }
 
 .pulse-glow {
@@ -746,23 +752,23 @@ body {
 }
 
 .hover\:scale-105:hover {
-  transform: scale(1.05);
+  transform: scale(1.005);
 }
 
 .hover\:scale-110:hover {
-  transform: scale(1.1);
+  transform: scale(1.0075);
 }
 
 .hover\:scale-150:hover {
-  transform: scale(1.5);
+  transform: scale(1.01);
 }
 
 .active\:scale-95:active {
-  transform: scale(0.95);
+  transform: scale(0.98);
 }
 
 .active\:scale-98:active {
-  transform: scale(0.98);
+  transform: scale(0.99);
 }
 
 /* 🌟 Advanced Micro-Animations */
@@ -771,8 +777,8 @@ body {
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-0.5px);
+  box-shadow: var(--shadow-md);
 }
 
 .hover-glow {
@@ -788,7 +794,7 @@ body {
 }
 
 .hover-bounce:hover {
-  transform: scale(1.05) translateY(-2px);
+  transform: scale(1.005) translateY(-0.25px);
 }
 
 /* 🎯 Interactive Card Effects */
@@ -798,8 +804,8 @@ body {
 }
 
 .card-interactive:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-0.25px) scale(1.0025);
+  box-shadow: var(--shadow-xs);
 }
 
 .card-floating {
@@ -807,8 +813,8 @@ body {
 }
 
 .card-floating:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-0.5px);
+  box-shadow: var(--shadow-sm);
   background: var(--bg-glass);
   backdrop-filter: blur(16px);
 }
@@ -866,7 +872,7 @@ body {
 
 /* Enhanced Hover Effects for Accessibility */
 .hover\:scale-102:hover {
-  transform: scale(1.02);
+  transform: scale(1.005);
 }
 
 /* Focus Ring for Accessibility */
@@ -895,8 +901,8 @@ body {
 }
 
 .card-interactive:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px) scale(1.005);
+  box-shadow: var(--shadow-md);
 }
 
 /* Accessibility: Reduced Motion Support */
@@ -910,5 +916,59 @@ body {
   
   .hover\:scale-102:hover {
     transform: none !important;
+  }
+}
+
+/* ========================================
+   🎯 ALIGNMENT FIXES
+   ======================================== */
+
+/* Ensure consistent header alignment */
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Center navigation alignment */
+.nav-center {
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  margin: 0 2rem;
+}
+
+/* Right-aligned user actions */
+.user-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Main content alignment */
+.main-content {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.main-content.max-width-container {
+  max-width: 80rem; /* 1280px */
+}
+
+/* Responsive alignment fixes */
+@media (max-width: 1023px) {
+  .header-content {
+    flex-wrap: wrap;
+  }
+  
+  .nav-center {
+    order: 3;
+    margin: 0.5rem 0 0;
+    width: 100%;
+    justify-content: center;
   }
 }

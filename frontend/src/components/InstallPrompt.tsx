@@ -98,7 +98,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
             
             <button
               onClick={onDismiss}
-              className="p-2 rounded-xl transition-smooth hover:scale-110 active:scale-95"
+              className="p-2 rounded-xl transition-smooth hover:scale-101 active:scale-98"
               style={{ backgroundColor: 'var(--bg-tertiary)' }}
               aria-label="Close install prompt"
             >
@@ -116,7 +116,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
             
             <div className="grid gap-3">
               {/* Offline Access */}
-              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-102" 
+              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-101" 
                    style={{ backgroundColor: 'var(--bg-secondary)' }}>
                 <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--color-success-50)' }}>
                   <Wifi className="w-4 h-4" style={{ color: 'var(--color-success-600)' }} />
@@ -132,7 +132,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
               </div>
 
               {/* Fast Performance */}
-              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-102" 
+              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-101" 
                    style={{ backgroundColor: 'var(--bg-secondary)' }}>
                 <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--color-warning-50)' }}>
                   <Zap className="w-4 h-4" style={{ color: 'var(--color-warning-600)' }} />
@@ -149,7 +149,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
 
               {/* Push Notifications */}
               {capabilities.notification && (
-                <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-102" 
+                <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-101" 
                      style={{ backgroundColor: 'var(--bg-secondary)' }}>
                   <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--color-info-50)' }}>
                     <Bell className="w-4 h-4" style={{ color: 'var(--color-info-600)' }} />
@@ -166,7 +166,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
               )}
 
               {/* Secure */}
-              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-102" 
+              <div className="flex items-center space-x-3 p-3 rounded-xl transition-smooth hover:scale-101" 
                    style={{ backgroundColor: 'var(--bg-secondary)' }}>
                 <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--color-primary-50)' }}>
                   <Shield className="w-4 h-4" style={{ color: 'var(--color-primary-600)' }} />
@@ -208,7 +208,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
               disabled={isInstalling}
               className={`
                 flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl 
-                font-medium transition-smooth transform hover:scale-105 active:scale-95
+                font-medium transition-smooth transform hover:scale-101 active:scale-99
                 ${isInstalling ? 'opacity-70 cursor-not-allowed' : ''}
               `}
               style={{ 
@@ -231,7 +231,7 @@ const InstallPrompt: React.FC<InstallPromptProps> = ({
             
             <button
               onClick={onDismiss}
-              className="px-4 py-3 rounded-xl font-medium transition-smooth transform hover:scale-105 active:scale-95"
+              className="px-4 py-3 rounded-xl font-medium transition-smooth transform hover:scale-101 active:scale-99"
               style={{ 
                 backgroundColor: 'var(--bg-tertiary)',
                 color: 'var(--text-secondary)'

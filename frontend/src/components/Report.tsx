@@ -226,7 +226,7 @@ const Report: React.FC = () => {
               </thead>
               <tbody className="divide-y" style={{ borderColor: 'var(--border-primary)' }}>
                 {mockStudents.map((student) => (
-                  <tr key={student.id} style={{ backgroundColor: 'var(--bg-primary)' }} className="transition-colors hover:opacity-90">
+                  <tr key={student.id} style={{ backgroundColor: 'var(--bg-primary)' }} className="transition-colors hover:opacity-99">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: 'var(--gradient-primary)' }}>
@@ -287,21 +287,24 @@ const Report: React.FC = () => {
                         disabled={emailsSent.has(student.id) || isLoading === student.id}
                         className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${emailsSent.has(student.id)
                           ? 'cursor-default'
-                          : 'text-white hover:shadow-md active:transform active:scale-95'
+                          : 'text-white hover:shadow-xs active:transform active:scale-99'
                           } ${isLoading === student.id ? 'opacity-50 cursor-not-allowed' : ''
                           }`}
                         style={{
                           backgroundColor: emailsSent.has(student.id) 
                             ? 'var(--color-success-bg-dark, #d1fae5)' 
-                            : 'var(--gradient-primary)',
+                            : '#3b82f6', // Using a solid color instead of gradient for better visibility
                           color: emailsSent.has(student.id) 
                             ? 'var(--color-success-dark, #059669)' 
-                            : 'var(--text-inverse)'
+                            : 'white',
+                          border: emailsSent.has(student.id) 
+                            ? '1px solid var(--color-success-600, #059669)' 
+                            : 'none'
                         }}
                       >
                         {isLoading === student.id ? (
                           <>
-                            <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--text-inverse)' }} />
+                            <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#ffffff' }} />
                             Sending...
                           </>
                         ) : emailsSent.has(student.id) ? (
@@ -350,21 +353,24 @@ const Report: React.FC = () => {
             disabled={allEmailsSent || isLoading === 'all'}
             className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold transition-all ${allEmailsSent
               ? 'cursor-default'
-              : 'text-white hover:shadow-lg active:transform active:scale-95'
+              : 'text-white hover:shadow-sm active:transform active:scale-99.5'
               } ${isLoading === 'all' ? 'opacity-50 cursor-not-allowed' : ''
               }`}
             style={{
-              background: allEmailsSent 
+              backgroundColor: allEmailsSent 
                 ? 'var(--color-success-bg-dark, #d1fae5)' 
-                : 'var(--gradient-primary)',
+                : '#3b82f6', // Using a solid color instead of gradient for better visibility
               color: allEmailsSent 
                 ? 'var(--color-success-dark, #059669)' 
-                : 'var(--text-inverse)'
+                : 'white',
+              border: allEmailsSent 
+                ? '1px solid var(--color-success-600, #059669)' 
+                : 'none'
             }}
           >
             {isLoading === 'all' ? (
               <>
-                <div className="h-5 w-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--text-inverse)' }} />
+                <div className="h-5 w-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: '#ffffff' }} />
                 Sending Emails to {selectedRiskFilter} Risk Parents...
               </>
             ) : allEmailsSent ? (

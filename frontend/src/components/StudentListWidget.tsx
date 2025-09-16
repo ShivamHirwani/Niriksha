@@ -154,7 +154,7 @@ const StudentListWidget: React.FC<StudentListWidgetProps> = ({ onViewStudent }) 
                     {column.sortable ? (
                       <button
                         onClick={() => handleSort(column.key)}
-                        className="flex items-center space-x-1 transition-smooth hover:scale-105"
+                        className="flex items-center space-x-1 transition-smooth hover:scale-101"
                         style={{ color: 'var(--text-muted)' }}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.color = 'var(--text-primary)';
@@ -179,7 +179,7 @@ const StudentListWidget: React.FC<StudentListWidgetProps> = ({ onViewStudent }) 
               <tr
                 key={student.id}
                 onClick={() => onViewStudent(student.id)}
-                className="cursor-pointer transition-smooth hover:scale-102"
+                className="cursor-pointer transition-smooth hover:scale-101"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = 'var(--bg-secondary)';
