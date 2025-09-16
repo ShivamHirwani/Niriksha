@@ -74,9 +74,24 @@ const StudentList = ({ onSelectStudent }) => {
 
   const getRiskBadgeColor = (level) => {
     switch (level) {
-      case 'high': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/50 dark:text-red-200 dark:border-red-700';
-      case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/50 dark:text-yellow-200 dark:border-yellow-700';
-      default: return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/50 dark:text-green-200 dark:border-green-700';
+      case 'high': 
+        return {
+          backgroundColor: 'var(--color-danger-bg-dark, #fee2e2)',
+          color: 'var(--color-danger-dark, #dc2626)',
+          borderColor: 'var(--color-danger-600, #dc2626)'
+        };
+      case 'medium': 
+        return {
+          backgroundColor: 'var(--color-warning-bg-dark, #fef3c7)',
+          color: 'var(--color-warning-dark, #d97706)',
+          borderColor: 'var(--color-warning-600, #d97706)'
+        };
+      default: 
+        return {
+          backgroundColor: 'var(--color-success-bg-dark, #d1fae5)',
+          color: 'var(--color-success-dark, #059669)',
+          borderColor: 'var(--color-success-600, #059669)'
+        };
     }
   };
 
@@ -238,9 +253,14 @@ const StudentList = ({ onSelectStudent }) => {
                     {/* Attendance Column */}
                     <td className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <span className={`text-sm font-medium ${student['Attendance%'] >= 90 ? 'text-green-600 dark:text-green-400' :
-                            student['Attendance%'] >= 75 ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-600 dark:text-red-400'
-                          }`}>
+                        <span 
+                          className="text-sm font-medium"
+                          style={{
+                            color: student['Attendance%'] >= 90 ? 'var(--color-success-dark, #059669)' :
+                                   student['Attendance%'] >= 75 ? 'var(--color-warning-dark, #d97706)' : 
+                                   'var(--color-danger-dark, #dc2626)'
+                          }}
+                        >
                           {student['Attendance%']}%
                         </span>
                       </div>
@@ -248,7 +268,14 @@ const StudentList = ({ onSelectStudent }) => {
 
                     {/* Risk Level Column */}
                     <td className="px-6 py-4 text-center">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${riskBadgeColor}`}>
+                      <span 
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border"
+                        style={{
+                          backgroundColor: getRiskBadgeColor(student.riskLevel).backgroundColor,
+                          color: getRiskBadgeColor(student.riskLevel).color,
+                          borderColor: getRiskBadgeColor(student.riskLevel).borderColor
+                        }}
+                      >
                         <RiskIcon className="w-3 h-3 mr-1" />
                         {student.riskLevel}
                       </span>

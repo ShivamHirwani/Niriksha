@@ -14,29 +14,30 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewStudent }) => {
   const { students } = useStudentContext();
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard Overview</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Monitor student risk levels and early warning indicators</p>
-        </div>
-        <div className="text-sm text-gray-500 dark:text-gray-400">
-          Last updated: {new Date().toLocaleString()}
-        </div>
+    <div className="space-y-8 animate-fade-in">
+      {/* 🚀 Quick Stats with Enhanced Animation */}
+      <div className="animate-slide-in-right" style={{ animationDelay: '0.1s' }}>
+        <QuickStats />
       </div>
-
-      <QuickStats />
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="lg:col-span-2">
+      {/* 📊 Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Trend Chart - Full Width */}
+        <div className="lg:col-span-2 animate-scale-in" style={{ animationDelay: '0.2s' }}>
           <TrendChart />
         </div>
         
-        <RiskOverview onViewStudent={onViewStudent} />
-        <RecentAlerts onViewStudent={onViewStudent} />
+        {/* Risk Overview & Recent Alerts */}
+        <div className="animate-slide-in-right" style={{ animationDelay: '0.3s' }}>
+          <RiskOverview onViewStudent={onViewStudent} />
+        </div>
+        <div className="animate-slide-in-right" style={{ animationDelay: '0.4s' }}>
+          <RecentAlerts onViewStudent={onViewStudent} />
+        </div>
       </div>
       
-      <div className="mt-6">
+      {/* 👥 Student List Widget */}
+      <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
         <StudentListWidget onViewStudent={onViewStudent} />
       </div>
     </div>
