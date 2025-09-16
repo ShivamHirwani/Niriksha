@@ -81,14 +81,29 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'high': return 'text-red-600 bg-red-100 border-red-200 dark:text-red-300 dark:bg-red-900/50 dark:border-red-800';
-      case 'medium': return 'text-yellow-600 bg-yellow-100 border-yellow-200 dark:text-yellow-300 dark:bg-yellow-900/50 dark:border-yellow-800';
-      default: return 'text-green-600 bg-green-100 border-green-200 dark:text-green-300 dark:bg-green-900/50 dark:border-green-800';
+      case 'high': 
+        return {
+          backgroundColor: 'var(--color-danger-bg-dark, #fee2e2)',
+          color: 'var(--color-danger-dark, #dc2626)',
+          borderColor: 'var(--color-danger-600, #dc2626)'
+        };
+      case 'medium': 
+        return {
+          backgroundColor: 'var(--color-warning-bg-dark, #fef3c7)',
+          color: 'var(--color-warning-dark, #d97706)',
+          borderColor: 'var(--color-warning-600, #d97706)'
+        };
+      default: 
+        return {
+          backgroundColor: 'var(--color-success-bg-dark, #d1fae5)',
+          color: 'var(--color-success-dark, #059669)',
+          borderColor: 'var(--color-success-600, #059669)'
+        };
     }
   };
 
   const RiskIcon = getRiskIcon(student.riskLevel);
-  const riskColorClass = getRiskColor(student.riskLevel);
+  const riskColorStyle = getRiskColor(student.riskLevel);
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
@@ -112,7 +127,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
           <p className="text-gray-600 dark:text-gray-400">Student ID: {student.studentId} • {student.program}</p>
           <p className="text-sm text-gray-500 dark:text-gray-400">Class: {student.class} • Batch: {student.batch}</p>
         </div>
-        <div className={`flex items-center space-x-2 px-4 py-2 rounded-lg border ${riskColorClass}`}>
+        <div className="flex items-center space-x-2 px-4 py-2 rounded-lg border" style={riskColorStyle}>
           <RiskIcon className="w-5 h-5" />
           <span className="font-medium capitalize">{student.riskLevel} Risk</span>
         </div>
@@ -209,11 +224,16 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                       <span className="text-gray-700 dark:text-gray-300">{factor.factor}</span>
                       <div className="flex items-center space-x-2">
                         <span className="text-sm text-gray-500 dark:text-gray-400">{Math.round(factor.weight * 100)}% weight</span>
-                        <span className={`px-2 py-1 text-xs rounded ${
-                          factor.severity === 'high' ? 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200' :
-                          factor.severity === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-gray-900 dark:text-yellow-200' :
-                          'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200'
-                        }`}>
+                        <span className="px-2 py-1 text-xs rounded"
+                          style={{
+                            backgroundColor: factor.severity === 'high' ? 'var(--color-danger-bg-dark, #fee2e2)' :
+                                           factor.severity === 'medium' ? 'var(--color-warning-bg-dark, #fef3c7)' :
+                                           'var(--color-success-bg-dark, #d1fae5)',
+                            color: factor.severity === 'high' ? 'var(--color-danger-dark, #dc2626)' :
+                                   factor.severity === 'medium' ? 'var(--color-warning-dark, #d97706)' :
+                                   'var(--color-success-dark, #059669)'
+                          }}
+                        >
                           {factor.severity}
                         </span>
                       </div>
@@ -242,21 +262,28 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                       <tr key={subject.name}>
                         <td className="py-3 px-4 text-gray-900 dark:text-gray-300">{subject.name}</td>
                         <td className="py-3 px-4">
-                          <span className={`font-medium ${
-                            subject.grade >= 80 ? 'text-green-600 dark:text-green-400' :
-                            subject.grade >= 60 ? 'text-yellow-600 dark:text-yellow-400' :
-                            'text-red-600 dark:text-red-400'
-                          }`}>
+                          <span className="font-medium"
+                            style={{
+                              color: subject.grade >= 80 ? 'var(--color-success-dark, #059669)' :
+                                     subject.grade >= 60 ? 'var(--color-warning-dark, #d97706)' :
+                                     'var(--color-danger-dark, #dc2626)'
+                            }}
+                          >
                             {subject.grade.toFixed(1)}%
                           </span>
                         </td>
                         <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{subject.attempts}/3</td>
                         <td className="py-3 px-4">
-                          <span className={`px-2 py-1 text-xs rounded-full ${
-                            subject.status === 'passing' ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' :
-                            subject.status === 'warning' ? 'bg-yellow-100 text-yellow-800 dark:bg-gray-900 dark:text-yellow-200' :
-                            'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
-                          }`}>
+                          <span className="px-2 py-1 text-xs rounded-full"
+                            style={{
+                              backgroundColor: subject.status === 'passing' ? 'var(--color-success-bg-dark, #d1fae5)' :
+                                             subject.status === 'warning' ? 'var(--color-warning-bg-dark, #fef3c7)' :
+                                             'var(--color-danger-bg-dark, #fee2e2)',
+                              color: subject.status === 'passing' ? 'var(--color-success-dark, #059669)' :
+                                     subject.status === 'warning' ? 'var(--color-warning-dark, #d97706)' :
+                                     'var(--color-danger-dark, #dc2626)'
+                            }}
+                          >
                             {subject.status}
                           </span>
                         </td>

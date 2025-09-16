@@ -121,20 +121,20 @@ const Report: React.FC = () => {
 
   const getRiskBadgeColor = (riskLevel: string) => {
     return riskLevel === 'Critical'
-      ? 'bg-red-100 text-red-800 border-red-200'
-      : 'bg-orange-100 text-orange-800 border-orange-200';
+      ? { backgroundColor: 'var(--color-danger-bg-dark, #fee2e2)', color: 'var(--color-danger-dark, #dc2626)', borderColor: 'var(--color-danger-600, #dc2626)' }
+      : { backgroundColor: 'var(--color-warning-bg-dark, #fef3c7)', color: 'var(--color-warning-dark, #d97706)', borderColor: 'var(--color-warning-600, #d97706)' };
   };
 
   const getAttendanceColor = (attendance: number) => {
-    if (attendance < 60) return 'text-red-600';
-    if (attendance < 75) return 'text-orange-600';
-    return 'text-green-600';
+    if (attendance < 60) return 'var(--color-danger-dark, #dc2626)';
+    if (attendance < 75) return 'var(--color-warning-dark, #d97706)';
+    return 'var(--color-success-dark, #059669)';
   };
 
   const getGpaColor = (gpa: number) => {
-    if (gpa < 2.0) return 'text-red-600';
-    if (gpa < 2.5) return 'text-orange-600';
-    return 'text-green-600';
+    if (gpa < 2.0) return 'var(--color-danger-dark, #dc2626)';
+    if (gpa < 2.5) return 'var(--color-warning-dark, #d97706)';
+    return 'var(--color-success-dark, #059669)';
   };
 
   if (showEmailForm && selectedStudent) {
@@ -148,128 +148,137 @@ const Report: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen p-6" style={{ backgroundColor: 'var(--bg-secondary)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="rounded-xl shadow-sm border p-6 mb-8" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-primary)' }}>
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-red-100 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+            <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--color-danger-bg-dark, #fee2e2)' }}>
+              <AlertTriangle className="h-6 w-6" style={{ color: 'var(--color-danger-dark, #dc2626)' }} />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Dropout Risk Report</h1>
-              <p className="text-gray-600 mt-1">Students requiring immediate attention and parent communication</p>
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>Dropout Risk Report</h1>
+              <p className="mt-1" style={{ color: 'var(--text-secondary)' }}>Students requiring immediate attention and parent communication</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
-            <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+            <div className="rounded-lg p-4 border" style={{ backgroundColor: 'var(--color-danger-bg-dark, #fee2e2)', borderColor: 'var(--color-danger-600, #dc2626)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-red-800">Critical Risk</p>
-                  <p className="text-2xl font-bold text-red-900">
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-danger-dark, #7f1d1d)' }}>Critical Risk</p>
+                  <p className="text-2xl font-bold" style={{ color: 'var(--color-danger-dark, #7f1d1d)' }}>
                     {mockStudents.filter(s => s.riskLevel === 'Critical').length}
                   </p>
                 </div>
-                <AlertTriangle className="h-8 w-8 text-red-600" />
+                <AlertTriangle className="h-8 w-8" style={{ color: 'var(--color-danger-dark, #dc2626)' }} />
               </div>
             </div>
 
-            <div className="bg-orange-50 rounded-lg p-4 border border-orange-200">
+            <div className="rounded-lg p-4 border" style={{ backgroundColor: 'var(--color-warning-bg-dark, #fef3c7)', borderColor: 'var(--color-warning-600, #d97706)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-orange-800">High Risk</p>
-                  <p className="text-2xl font-bold text-orange-900">
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-warning-dark, #92400e)' }}>High Risk</p>
+                  <p className="text-2xl font-bold" style={{ color: 'var(--color-warning-dark, #92400e)' }}>
                     {mockStudents.filter(s => s.riskLevel === 'High').length}
                   </p>
                 </div>
-                <User className="h-8 w-8 text-orange-600" />
+                <User className="h-8 w-8" style={{ color: 'var(--color-warning-dark, #d97706)' }} />
               </div>
             </div>
 
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <div className="rounded-lg p-4 border" style={{ backgroundColor: 'var(--color-info-bg-dark, #cffafe)', borderColor: 'var(--color-info-600, #0891b2)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-blue-800">Total Students</p>
-                  <p className="text-2xl font-bold text-blue-900">{mockStudents.length}</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-info-dark, #164e63)' }}>Total Students</p>
+                  <p className="text-2xl font-bold" style={{ color: 'var(--color-info-dark, #164e63)' }}>{mockStudents.length}</p>
                 </div>
-                <GraduationCap className="h-8 w-8 text-blue-600" />
+                <GraduationCap className="h-8 w-8" style={{ color: 'var(--color-info-dark, #0891b2)' }} />
               </div>
             </div>
 
-            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+            <div className="rounded-lg p-4 border" style={{ backgroundColor: 'var(--color-success-bg-dark, #d1fae5)', borderColor: 'var(--color-success-600, #059669)' }}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-green-800">Emails Sent</p>
-                  <p className="text-2xl font-bold text-green-900">{emailsSent.size}</p>
+                  <p className="text-sm font-medium" style={{ color: 'var(--color-success-dark, #065f46)' }}>Emails Sent</p>
+                  <p className="text-2xl font-bold" style={{ color: 'var(--color-success-dark, #065f46)' }}>{emailsSent.size}</p>
                 </div>
-                <Mail className="h-8 w-8 text-green-600" />
+                <Mail className="h-8 w-8" style={{ color: 'var(--color-success-dark, #10b981)' }} />
               </div>
             </div>
           </div>
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="rounded-xl shadow-sm border overflow-hidden" style={{ backgroundColor: 'var(--bg-primary)', borderColor: 'var(--border-primary)' }}>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
+              <thead className="border-b" style={{ backgroundColor: 'var(--bg-tertiary)', borderColor: 'var(--border-primary)' }}>
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Student</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Risk Level</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Parent Contact</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Attendance</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">GPA</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Last Contact</th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900">Action</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Student</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Risk Level</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Parent Contact</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Attendance</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>GPA</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Last Contact</th>
+                  <th className="px-6 py-4 text-center text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y" style={{ borderColor: 'var(--border-primary)' }}>
                 {mockStudents.map((student) => (
-                  <tr key={student.id} className="hover:bg-gray-50 transition-colors">
+                  <tr key={student.id} style={{ backgroundColor: 'var(--bg-primary)' }} className="transition-colors hover:opacity-90">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full flex items-center justify-center" style={{ background: 'var(--gradient-primary)' }}>
                           <span className="text-white font-medium text-sm">
                             {student.name.split(' ').map(n => n[0]).join('')}
                           </span>
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{student.name}</p>
-                          <p className="text-sm text-gray-500">ID: {student.id}</p>
+                          <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{student.name}</p>
+                          <p className="text-sm" style={{ color: 'var(--text-muted)' }}>ID: {student.id}</p>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getRiskBadgeColor(student.riskLevel)}`}>
+                      <span 
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border"
+                        style={getRiskBadgeColor(student.riskLevel)}
+                      >
                         <AlertTriangle className="h-3 w-3 mr-1" />
                         {student.riskLevel}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div>
-                        <p className="font-medium text-gray-900">{student.parentName}</p>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <p className="font-medium" style={{ color: 'var(--text-primary)' }}>{student.parentName}</p>
+                        <p className="text-sm flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                           <Mail className="h-3 w-3" />
                           {student.parentEmail}
                         </p>
-                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <p className="text-sm flex items-center gap-1" style={{ color: 'var(--text-muted)' }}>
                           <Phone className="h-3 w-3" />
                           {student.phone}
                         </p>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`font-medium ${getAttendanceColor(student.attendance)}`}>
+                      <span 
+                        className="font-medium"
+                        style={{ color: getAttendanceColor(student.attendance) }}
+                      >
                         {student.attendance}%
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`font-medium ${getGpaColor(student.gpa)}`}>
+                      <span 
+                        className="font-medium"
+                        style={{ color: getGpaColor(student.gpa) }}
+                      >
                         {student.gpa}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-6 py-4 text-sm" style={{ color: 'var(--text-muted)' }}>
                       {new Date(student.lastContact).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-center">
@@ -277,14 +286,22 @@ const Report: React.FC = () => {
                         onClick={() => handleSendEmail(student)}
                         disabled={emailsSent.has(student.id) || isLoading === student.id}
                         className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${emailsSent.has(student.id)
-                          ? 'bg-green-100 text-green-800 cursor-default'
-                          : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md active:transform active:scale-95'
+                          ? 'cursor-default'
+                          : 'text-white hover:shadow-md active:transform active:scale-95'
                           } ${isLoading === student.id ? 'opacity-50 cursor-not-allowed' : ''
                           }`}
+                        style={{
+                          backgroundColor: emailsSent.has(student.id) 
+                            ? 'var(--color-success-bg-dark, #d1fae5)' 
+                            : 'var(--gradient-primary)',
+                          color: emailsSent.has(student.id) 
+                            ? 'var(--color-success-dark, #059669)' 
+                            : 'var(--text-inverse)'
+                        }}
                       >
                         {isLoading === student.id ? (
                           <>
-                            <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <div className="h-4 w-4 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--text-inverse)' }} />
                             Sending...
                           </>
                         ) : emailsSent.has(student.id) ? (
@@ -308,17 +325,23 @@ const Report: React.FC = () => {
         </div>
 
         {/* Send All Button */}
-        <div className="mt-8 flex justify-center items-center gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-sm font-medium text-gray-700">Filter by Risk Level:</label>
+            <label className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Filter by Risk Level:</label>
             <select
               value={selectedRiskFilter}
               onChange={(e) => setSelectedRiskFilter(e.target.value as 'All' | 'High' | 'Critical')}
-              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="px-3 py-2 rounded-lg focus:ring-2 focus:outline-none text-sm"
+              style={{
+                backgroundColor: 'var(--bg-tertiary)',
+                borderColor: 'var(--border-primary)',
+                color: 'var(--text-primary)',
+                '--tw-ring-color': 'var(--color-primary-500)'
+              } as React.CSSProperties}
             >
-              <option value="All">All Levels</option>
-              <option value="High">High Risk Only</option>
-              <option value="Critical">Critical Risk Only</option>
+              <option value="All" style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' }}>All Levels</option>
+              <option value="High" style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' }}>High Risk Only</option>
+              <option value="Critical" style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-primary)' }}>Critical Risk Only</option>
             </select>
           </div>
 
@@ -326,14 +349,22 @@ const Report: React.FC = () => {
             onClick={handleSendAllEmails}
             disabled={allEmailsSent || isLoading === 'all'}
             className={`inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold transition-all ${allEmailsSent
-              ? 'bg-green-100 text-green-800 cursor-default'
-              : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 hover:shadow-lg active:transform active:scale-95'
+              ? 'cursor-default'
+              : 'text-white hover:shadow-lg active:transform active:scale-95'
               } ${isLoading === 'all' ? 'opacity-50 cursor-not-allowed' : ''
               }`}
+            style={{
+              background: allEmailsSent 
+                ? 'var(--color-success-bg-dark, #d1fae5)' 
+                : 'var(--gradient-primary)',
+              color: allEmailsSent 
+                ? 'var(--color-success-dark, #059669)' 
+                : 'var(--text-inverse)'
+            }}
           >
             {isLoading === 'all' ? (
               <>
-                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="h-5 w-5 border-2 border-t-transparent rounded-full animate-spin" style={{ borderColor: 'var(--text-inverse)' }} />
                 Sending Emails to {selectedRiskFilter} Risk Parents...
               </>
             ) : allEmailsSent ? (
