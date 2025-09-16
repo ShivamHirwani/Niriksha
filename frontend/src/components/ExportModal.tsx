@@ -167,7 +167,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
             
             <button
               onClick={onClose}
-              className="p-2 rounded-xl transition-smooth hover:scale-110 active:scale-95"
+              className="p-2 rounded-xl transition-smooth hover:scale-101 active:scale-98"
               style={{ backgroundColor: 'var(--bg-tertiary)' }}
               aria-label="Close export modal"
             >
@@ -189,7 +189,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                   <button
                     onClick={() => setExportOptions(prev => ({ ...prev, format: 'csv' }))}
                     className={`
-                      flex items-center space-x-3 p-4 rounded-xl border transition-smooth hover:scale-102
+                      flex items-center space-x-3 p-4 rounded-xl border transition-smooth hover:scale-101
                       ${exportOptions.format === 'csv' ? 'shadow-glass' : ''}
                     `}
                     style={{
@@ -208,7 +208,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                   <button
                     onClick={() => setExportOptions(prev => ({ ...prev, format: 'json' }))}
                     className={`
-                      flex items-center space-x-3 p-4 rounded-xl border transition-smooth hover:scale-102
+                      flex items-center space-x-3 p-4 rounded-xl border transition-smooth hover:scale-101
                       ${exportOptions.format === 'json' ? 'shadow-glass' : ''}
                     `}
                     style={{
@@ -232,7 +232,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                   <h3 className="text-body font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>
                     CSV Options
                   </h3>
-                  <label className="flex items-center space-x-3 p-3 rounded-xl cursor-pointer transition-smooth hover:scale-102"
+                  <label className="flex items-center space-x-3 p-3 rounded-xl cursor-pointer transition-smooth hover:scale-101"
                          style={{ backgroundColor: 'var(--bg-secondary)' }}>
                     <input
                       type="checkbox"
@@ -256,7 +256,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                   </h3>
                   <button
                     onClick={handleSelectAll}
-                    className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-105"
+                    className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-101"
                     style={{ backgroundColor: 'var(--color-primary-50)', color: 'var(--color-primary-600)' }}
                   >
                     {selectedFields.size === availableFields.length ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
@@ -270,7 +270,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                   {availableFields.map((field) => (
                     <label
                       key={field.key}
-                      className="flex items-start space-x-3 p-3 rounded-xl cursor-pointer transition-smooth hover:scale-102"
+                      className="flex items-start space-x-3 p-3 rounded-xl cursor-pointer transition-smooth hover:scale-101"
                       style={{ backgroundColor: 'var(--bg-secondary)' }}
                     >
                       <input
@@ -317,7 +317,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                 </h3>
                 <button
                   onClick={() => setShowPreview(false)}
-                  className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-105"
+                  className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-101"
                   style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-secondary)' }}
                 >
                   <Settings className="w-4 h-4" />
@@ -425,7 +425,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
               {!showPreview && selectedFields.size > 0 && (
                 <button
                   onClick={generatePreview}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-xl transition-smooth hover:scale-105 active:scale-95"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-xl transition-smooth hover:scale-101 active:scale-99"
                   style={{ 
                     backgroundColor: 'var(--bg-tertiary)',
                     color: 'var(--text-secondary)'
@@ -440,7 +440,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
                 disabled={isExporting || selectedFields.size === 0}
                 className={`
                   flex items-center space-x-2 px-4 py-2 rounded-xl font-medium 
-                  transition-smooth transform hover:scale-105 active:scale-95
+                  transition-smooth transform hover:scale-101 active:scale-99
                   ${isExporting || selectedFields.size === 0 ? 'opacity-50 cursor-not-allowed' : ''}
                 `}
                 style={{ 

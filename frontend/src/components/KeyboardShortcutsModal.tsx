@@ -71,7 +71,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
             
             <button
               onClick={onClose}
-              className="p-2 rounded-xl transition-smooth hover:scale-110 active:scale-95"
+              className="p-2 rounded-xl transition-smooth hover:scale-101 active:scale-98"
               style={{ backgroundColor: 'var(--bg-tertiary)' }}
               aria-label="Close shortcuts modal"
             >
@@ -109,7 +109,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                       <div
                         key={shortcut.id}
                         className={`
-                          group p-4 rounded-xl transition-smooth hover:scale-102
+                          group p-4 rounded-xl transition-smooth hover:scale-101
                           ${shortcut.disabled ? 'opacity-50' : 'hover:shadow-glass'}
                         `}
                         style={{ 
@@ -140,7 +140,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
                                   </span>
                                 )}
                                 <kbd 
-                                  className="px-3 py-1 text-body-sm font-medium rounded-lg border shadow-sm transition-smooth group-hover:scale-105"
+                                  className="px-3 py-1 text-body-sm font-medium rounded-lg border shadow-sm transition-smooth group-hover:scale-101"
                                   style={{ 
                                     backgroundColor: 'var(--bg-tertiary)',
                                     borderColor: 'var(--border-secondary)',
@@ -197,7 +197,7 @@ const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
             <div className="flex items-center space-x-3">
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl transition-smooth hover:scale-105 active:scale-95 font-medium"
+                className="px-4 py-2 rounded-xl transition-smooth hover:scale-101 active:scale-99 font-medium"
                 style={{ 
                   backgroundColor: 'var(--color-primary-100)',
                   color: 'var(--color-primary-600)'

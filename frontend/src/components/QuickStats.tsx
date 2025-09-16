@@ -59,7 +59,7 @@ const QuickStats: React.FC = () => {
         return (
           <div 
             key={stat.title} 
-            className="glass-morphism p-6 rounded-2xl shadow-glass hover:shadow-xl transition-smooth transform hover:scale-105 animate-fade-in"
+            className="glass-morphism p-6 rounded-2xl shadow-glass hover:shadow-lg transition-smooth transform hover:scale-101 animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="flex items-start justify-between mb-4">

@@ -141,7 +141,7 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ onViewStudent }) => {
                 <div
                   key={alert.id}
                   className={`
-                    relative border rounded-2xl p-5 transition-smooth transform hover:scale-102
+                    relative border rounded-2xl p-5 transition-smooth transform hover:scale-101
                     ${borderClass} ${isVisible ? 'animate-slide-in-right opacity-100' : 'opacity-0'}
                     hover:shadow-glass
                   `}
@@ -153,7 +153,7 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ onViewStudent }) => {
                   {/* Dismiss Button */}
                   <button
                     onClick={() => handleDismissAlert(alert.id)}
-                    className="absolute top-3 right-3 p-1 rounded-full transition-smooth hover:scale-110 active:scale-95"
+                    className="absolute top-3 right-3 p-1 rounded-full transition-smooth hover:scale-101 active:scale-98"
                     style={{ backgroundColor: 'var(--bg-tertiary)' }}
                     title="Dismiss alert"
                   >
@@ -188,7 +188,7 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ onViewStudent }) => {
                       <div className="flex items-center justify-between">
                         <button
                           onClick={() => onViewStudent(alert.studentId)}
-                          className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-105 active:scale-95"
+                          className="flex items-center space-x-2 px-3 py-1 rounded-lg transition-smooth hover:scale-101 active:scale-99"
                           style={{ backgroundColor: 'var(--color-primary-50)', color: 'var(--color-primary-600)' }}
                         >
                           <User className="w-4 h-4" />
@@ -216,7 +216,7 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ onViewStudent }) => {
       {recentAlerts.length > 0 && (
         <div className="mt-6 pt-4 border-t" style={{ borderColor: 'var(--border-primary)' }}>
           <button 
-            className="w-full py-3 rounded-xl transition-smooth transform hover:scale-105 active:scale-95 font-medium"
+            className="w-full py-3 rounded-xl transition-smooth transform hover:scale-101 active:scale-99 font-medium"
             style={{ 
               backgroundColor: 'var(--color-primary-50)',
               color: 'var(--color-primary-600)'

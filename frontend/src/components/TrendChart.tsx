@@ -228,11 +228,11 @@ const TrendChart: React.FC = () => {
                 onClick={() => setSelectedPeriod(period.id)}
                 className={`
                   flex items-center space-x-2 px-4 py-2 rounded-lg transition-smooth
-                  transform hover:scale-105 active:scale-95
+                  transform hover:scale-101 active:scale-99
                   ${
                     isActive 
                       ? 'shadow-glass font-medium' 
-                      : 'hover:shadow-md opacity-70 hover:opacity-100'
+                      : 'hover:shadow-sm opacity-90 hover:opacity-100'
                   }
                 `}
                 style={{

@@ -66,7 +66,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
 
   return (
     <div 
-      className="glass-morphism p-6 rounded-2xl shadow-glass transition-smooth hover:shadow-xl animate-fade-in"
+      className="glass-morphism p-6 rounded-2xl shadow-glass transition-smooth hover:shadow-lg animate-fade-in"
       style={{ borderColor: 'var(--border-primary)' }}
     >
       {/* Enhanced Header */}
@@ -96,7 +96,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
           return (
             <div 
               key={level} 
-              className="modern-card p-5 rounded-xl transition-smooth hover:scale-102 animate-slide-in-right"
+              className="modern-card p-5 rounded-xl transition-smooth hover:scale-101 animate-slide-in-right"
               style={{ 
                 backgroundColor: 'var(--bg-secondary)',
                 borderColor: getRiskBorderColor(level),
@@ -120,7 +120,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                   </div>
                 </div>
                 <span 
-                  className="px-3 py-1 text-caption font-medium rounded-full transition-smooth hover:scale-105"
+                  className="px-3 py-1 text-caption font-medium rounded-full transition-smooth hover:scale-101"
                   style={badgeStyle}
                 >
                   {studentList.length} {studentList.length === 1 ? 'student' : 'students'}
@@ -141,7 +141,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                     <div 
                       key={student.id}
                       onClick={() => onViewStudent(student.id)}
-                      className="flex items-center justify-between p-3 rounded-lg transition-smooth cursor-pointer hover:scale-102 card-interactive"
+                      className="flex items-center justify-between p-3 rounded-lg transition-smooth cursor-pointer hover:scale-101 card-interactive"
                       style={{ backgroundColor: 'var(--bg-tertiary)' }}
                     >
                       <div className="flex items-center space-x-3">
@@ -208,7 +208,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                 {/* Show More Button */}
                 {studentList.length > 3 && (
                   <button 
-                    className="w-full py-3 rounded-lg transition-smooth hover:scale-102 active:scale-98 font-medium"
+                    className="w-full py-3 rounded-lg transition-smooth hover:scale-101 active:scale-99 font-medium"
                     style={{
                       backgroundColor: 'var(--color-primary-50)',
                       color: 'var(--color-primary-600)'
