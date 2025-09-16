@@ -6,5 +6,8 @@ joblib
 gspread 
 oauth2client
 python-dotenv
-flask-cors
 flask
+flask-security-too
+flask-jwt-extended
+flask-restful
+bcrypt
