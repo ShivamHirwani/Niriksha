@@ -42,16 +42,19 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
   const getRiskBadgeColor = (level: string) => {
     switch (level) {
       case 'high': return {
-        backgroundColor: 'var(--color-danger-100)',
-        color: 'var(--color-danger-700)'
+        backgroundColor: 'var(--color-danger-bg-dark, var(--color-danger-100))',
+        color: 'var(--color-danger-dark, var(--color-danger-700))',
+        border: '1px solid var(--color-danger-dark, var(--color-danger-200))'
       };
       case 'medium': return {
-        backgroundColor: 'var(--color-warning-100)',
-        color: 'var(--color-warning-700)'
+        backgroundColor: 'var(--color-warning-bg-dark, var(--color-warning-100))',
+        color: 'var(--color-warning-dark, var(--color-warning-700))',
+        border: '1px solid var(--color-warning-dark, var(--color-warning-200))'
       };
       default: return {
-        backgroundColor: 'var(--color-success-100)',
-        color: 'var(--color-success-700)'
+        backgroundColor: 'var(--color-success-bg-dark, var(--color-success-100))',
+        color: 'var(--color-success-dark, var(--color-success-700))',
+        border: '1px solid var(--color-success-dark, var(--color-success-200))'
       };
     }
   };
@@ -120,10 +123,11 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                   </div>
                 </div>
                 <span 
-                  className="px-3 py-1 text-caption font-medium rounded-full transition-smooth hover:scale-101"
+                  className="px-3 py-1 text-caption font-medium rounded-full transition-smooth hover:scale-101 flex items-center space-x-1 shadow-sm dark:shadow-lg"
                   style={badgeStyle}
                 >
-                  {studentList.length} {studentList.length === 1 ? 'student' : 'students'}
+                  <span className="font-bold text-body" style={{ color: 'var(--text-primary)' }}>{studentList.length}</span>
+                  <span className="text-body-sm" style={{ color: 'var(--text-primary)' }}>{studentList.length === 1 ? 'student' : 'students'}</span>
                 </span>
               </div>
               
@@ -175,26 +179,36 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                       {/* Student Metrics */}
                       <div className="text-right space-y-1">
                         <div className="flex items-center space-x-2">
-                          <span className="text-caption" style={{ color: 'var(--text-muted)' }}>ATTENDANCE</span>
+                          <span className="text-caption font-medium" style={{ color: 'var(--text-muted)' }}>ATTENDANCE</span>
                           <span 
-                            className="text-body-sm font-semibold px-2 py-1 rounded-md"
-                            style={{
-                              backgroundColor: student['Attendance%'] >= 85 ? 'var(--color-success-100)' : 
-                                              student['Attendance%'] >= 70 ? 'var(--color-warning-100)' : 'var(--color-danger-100)',
-                              color: student['Attendance%'] >= 85 ? 'var(--color-success-700)' : 
-                                     student['Attendance%'] >= 70 ? 'var(--color-warning-700)' : 'var(--color-danger-700)'
-                            }}
+                            className="text-body-sm font-semibold px-2 py-1 rounded-md border"
+                            style={
+                              student['Attendance%'] >= 85 ? {
+                                backgroundColor: 'var(--color-success-bg-dark, var(--color-success-100))',
+                                color: 'var(--color-success-dark, var(--color-success-700))',
+                                borderColor: 'var(--color-success-dark, var(--color-success-200))'
+                              } : student['Attendance%'] >= 70 ? {
+                                backgroundColor: 'var(--color-warning-bg-dark, var(--color-warning-100))',
+                                color: 'var(--color-warning-dark, var(--color-warning-700))',
+                                borderColor: 'var(--color-warning-dark, var(--color-warning-200))'
+                              } : {
+                                backgroundColor: 'var(--color-danger-bg-dark, var(--color-danger-100))',
+                                color: 'var(--color-danger-dark, var(--color-danger-700))',
+                                borderColor: 'var(--color-danger-dark, var(--color-danger-200))'
+                              }
+                            }
                           >
                             {student['Attendance%'].toFixed(1)}%
                           </span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-caption" style={{ color: 'var(--text-muted)' }}>AVG SCORE</span>
+                          <span className="text-caption font-medium" style={{ color: 'var(--text-muted)' }}>AVG SCORE</span>
                           <span 
-                            className="text-body-sm font-semibold px-2 py-1 rounded-md"
+                            className="text-body-sm font-semibold px-2 py-1 rounded-md border"
                             style={{
-                              backgroundColor: 'var(--color-info-100)',
-                              color: 'var(--color-info-700)'
+                              backgroundColor: 'var(--color-info-bg-dark, var(--color-info-100))',
+                              color: 'var(--color-info-dark, var(--color-info-700))',
+                              borderColor: 'var(--color-info-dark, var(--color-info-200))'
                             }}
                           >
                             {((student.q1_avg_score + student.q2_avg_score + student.q3_avg_score) / 3).toFixed(1)}
@@ -210,8 +224,9 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                   <button 
                     className="w-full py-3 rounded-lg transition-smooth hover:scale-101 active:scale-99 font-medium"
                     style={{
-                      backgroundColor: 'var(--color-primary-50)',
-                      color: 'var(--color-primary-600)'
+                      backgroundColor: 'var(--bg-tertiary)',
+                      color: 'var(--text-primary)',
+                      border: '1px solid var(--border-primary)'
                     }}
                     onClick={() => {/* Navigate to filtered students view */}}
                   >
