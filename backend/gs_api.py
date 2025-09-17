@@ -9,6 +9,7 @@ import joblib
 from sklearn.preprocessing import LabelEncoder
 
 
+
 load_dotenv()
 json_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
