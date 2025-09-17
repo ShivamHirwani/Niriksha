@@ -150,10 +150,13 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           {/* Main header content with improved alignment */}
           <div className="flex items-center justify-between h-20">
             {/* Logo and Brand - Left Section */}
-            <div className="flex items-center min-w-0 flex-shrink-0">
+            <div className="flex items-center min-w-0 flex-shrink-0 space-x-3">
               <div className="p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
                 <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-12 h-12 object-contain" />
               </div>
+              <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 flex items-center">
+                Niriksha
+              </h1>
             </div>
 
             {/* Main Navigation - Center Section */}
