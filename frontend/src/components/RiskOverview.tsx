@@ -151,7 +151,7 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                       <div className="flex items-center space-x-3">
                         {/* Student Avatar */}
                         <div 
-                          className="w-10 h-10 rounded-full flex items-center justify-center font-medium text-body-sm shadow-glass"
+                          className="w-10 h-10 rounded-full flex items-center justify-center font-medium text-body-sm shadow-glass flex-shrink-0"
                           style={{ 
                             background: `var(--gradient-${level === 'high' ? 'secondary' : level === 'medium' ? 'primary' : 'success'})`,
                             color: 'white'
@@ -161,15 +161,15 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                         </div>
                         
                         {/* Student Info */}
-                        <div className="flex-1">
-                          <p className="text-body font-medium transition-smooth" style={{ color: 'var(--text-primary)' }}>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-body font-medium transition-smooth truncate" style={{ color: 'var(--text-primary)' }}>
                             {student.name}
                           </p>
                           <div className="flex items-center space-x-4 mt-1">
-                            <span className="text-body-sm" style={{ color: 'var(--text-muted)' }}>
+                            <span className="text-body-sm whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                               ID: {student.studentId}
                             </span>
-                            <span className="text-body-sm" style={{ color: 'var(--text-muted)' }}>
+                            <span className="text-body-sm whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
                               {student.program}
                             </span>
                           </div>
@@ -177,11 +177,11 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                       </div>
                       
                       {/* Student Metrics */}
-                      <div className="text-right space-y-1">
-                        <div className="flex items-center space-x-2">
+                      <div className="text-right space-y-1 ml-4" style={{ minWidth: '120px' }}>
+                        <div className="flex items-center justify-between">
                           <span className="text-caption font-medium" style={{ color: 'var(--text-muted)' }}>ATTENDANCE</span>
                           <span 
-                            className="text-body-sm font-semibold px-2 py-1 rounded-md border"
+                            className="text-body-sm font-semibold px-2 py-1 rounded-md border ml-2 whitespace-nowrap"
                             style={
                               student['Attendance%'] >= 85 ? {
                                 backgroundColor: 'var(--color-success-bg-dark, var(--color-success-100))',
@@ -201,10 +201,10 @@ const RiskOverview: React.FC<RiskOverviewProps> = ({ onViewStudent }) => {
                             {student['Attendance%'].toFixed(1)}%
                           </span>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center justify-between">
                           <span className="text-caption font-medium" style={{ color: 'var(--text-muted)' }}>AVG SCORE</span>
                           <span 
-                            className="text-body-sm font-semibold px-2 py-1 rounded-md border"
+                            className="text-body-sm font-semibold px-2 py-1 rounded-md border ml-2 whitespace-nowrap"
                             style={{
                               backgroundColor: 'var(--color-info-bg-dark, var(--color-info-100))',
                               color: 'var(--color-info-dark, var(--color-info-700))',
