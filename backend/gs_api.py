@@ -148,19 +148,20 @@ df_with_nan= (df_students
      .merge(df_fees_info, on= 'student_id', how='left')
     )
 
+
 df_filled= df_with_nan.fillna({
     'attendance_percentage': df_attendance_info['attendance_percentage'].mean(),
     'q1_average_test_score': df_assessments_info['q1_average_test_score'].mean(),
     'q2_average_test_score': df_assessments_info['q2_average_test_score'].mean(),
     'q3_average_test_score': df_assessments_info['q3_average_test_score'].mean(),
-    'q1_test_score_trend': df_assessments_info['q1_test_score_trend'].mode(),
-    'q2_test_score_trend': df_assessments_info['q2_test_score_trend'].mode(),
-    'q3_test_score_trend': df_assessments_info['q3_test_score_trend'].mode(),
-    'q1_attempts_used': df_assessments_info['q1_attempts_used'].median(),
-    'q2_attempts_used': df_assessments_info['q2_attempts_used'].median(),
-    'q3_attempts_used': df_assessments_info['q3_attempts_used'].median(),
-    'fee_status': df_fees_info['fee_status'].mode(),
-    'fee_due_date': df_fees_info['fee_due_date'].mode()
+    'q1_test_score_trend': df_assessments_info['q1_test_score_trend'].mode()[0],
+    'q2_test_score_trend': df_assessments_info['q2_test_score_trend'].mode()[0],
+    'q3_test_score_trend': df_assessments_info['q3_test_score_trend'].mode()[0],
+    'q1_attempts_used': df_assessments_info['q1_attempts_used'].mode()[0],
+    'q2_attempts_used': df_assessments_info['q2_attempts_used'].mode()[0],
+    'q3_attempts_used': df_assessments_info['q3_attempts_used'].mode()[0],
+    'fee_status': df_fees_info['fee_status'].mode()[0],
+    'fee_due_date': df_fees_info['fee_due_date'].mode()[0]
 })
 
 
@@ -168,11 +169,9 @@ df= df_filled.drop(['gpa','class', 'batch','mentor_email', 'parent_email', 'pare
 
 # make a lable encoder
 
-le= LabelEncoder()
 
-df['q1_test_score_trend']= le.fit_transform(df['q1_test_score_trend'])
-df['q2_test_score_trend']= le.fit_transform(df['q2_test_score_trend'])
-df['q3_test_score_trend']= le.fit_transform(df['q3_test_score_trend'])
+
+le= LabelEncoder()
 df['fee_status']= le.fit_transform(df['fee_status'])
 
 
@@ -186,6 +185,7 @@ df['medium_risk']= y_predict[:, 1]*100
 df['low_risk']= y_predict[:, 0]*100
 
 final_df= df
+
 
 
 

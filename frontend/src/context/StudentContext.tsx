@@ -102,9 +102,9 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
     return rawData.map((row, index) => {
       // Determine risk level based on the risk columns
       let riskLevel: 'high' | 'medium' | 'low' = 'low';
-      if (row.high_risk === 1) riskLevel = 'high';
-      else if (row.medium_risk === 1) riskLevel = 'medium';
-      else if (row.low_risk === 1) riskLevel = 'low';
+      if (row.high_risk >= 95) riskLevel = 'high';
+      else if (row.medium_risk >= 95) riskLevel = 'medium';
+      else if (row.low_risk >=80) riskLevel = 'low';
 
       return {
         id: row.student_id || `student_${index}`,
@@ -167,7 +167,7 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
     // Get student's attendance data
     const studentAttendance = attendanceData.filter(att => att.student_id === rawData.student_id);
     const attendanceRate = studentAttendance.length > 0 
-      ? studentAttendance.reduce((sum, att) => sum + (att.present ? 1 : 0), 0) / studentAttendance.length * 100
+      ? studentAttendance.reduce((sum, att) => sum + (att.classes_attended >0 ? 1 : 0), 0) / studentAttendance.length * 100
       : 85; // Default attendance rate
 
     // Get student's assessment data
@@ -268,269 +268,330 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
     };
   };
 
-  // Get detailed student information (demo version)
+  // Get detailed student information with backend fallback
   const getStudentDetail = async (studentId: string): Promise<StudentDetail> => {
     console.log('Getting student detail for:', studentId);
     
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Find student in our demo data
-    const student = students.find(s => s.id === studentId);
-    
-    if (!student) {
-      console.log('Student not found, returning fallback data');
+    try {
+      // Try to fetch from backend first
+      const [studentsInfoResponse, attendanceResponse, studentsDataResponse, feesResponse] = await Promise.all([
+        fetch('http://localhost:5000/students_info'),    // For basic info, mentor_email, parent_email, parent_phone
+        fetch('http://localhost:5000/attendance_info'),   // For attendance with 'date' feature
+        fetch('http://localhost:5000/assessments_info'),       // For Q1, Q2, Q3 academic data and attempts
+        fetch('http://localhost:5000/fees_info')          // For fee information
+      ]);
+
+      if (!studentsInfoResponse.ok) {
+        throw new Error(`HTTP ${studentsInfoResponse.status}: Failed to fetch student data`);
+      }
+
+      const studentsInfoData = await studentsInfoResponse.json();
+      const attendanceData = await attendanceResponse.json();
+      const studentsDataData = await studentsDataResponse.json();
+      const feesData = await feesResponse.json();
+
+      // Find the specific student in students_info (basic info)
+      const studentInfoData = studentsInfoData.find((student: any) => student.student_id === studentId);
+      
+      // Find the same student in students_df (academic data)
+      const studentAcademicData = studentsDataData.find((student: any) => student.student_id === studentId);
+      
+      if (!studentInfoData) {
+        throw new Error('Student not found in backend data');
+      }
+
+      // Process and return detailed student information
+      return processStudentDetailData(studentInfoData, attendanceData, studentAcademicData || {}, feesData);
+
+    } catch (error) {
+      console.error('Error fetching student detail from backend:', error);
+      console.log('Falling back to demo data...');
+      
+      // Simulate API delay for consistency
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Find student in our demo data
+      const student = students.find(s => s.id === studentId);
+      
+      if (!student) {
+        console.log('Student not found in demo data, returning fallback');
+      }
+      
+      // Generate realistic demo data based on the student
+      const demoDetails: StudentDetail = {
+        id: studentId,
+        name: student?.name || 'Demo Student',
+        studentId: student?.studentId || studentId,
+        class: 'Class A',
+        batch: '2024',
+        program: student?.program || 'Computer Science',
+        email: `${student?.studentId || studentId}@student.edu`,
+        phone: '+1-555-0123',
+        mentorEmail: 'mentor@institution.edu',
+        parentEmail: 'parent@email.com',
+        parentPhone: '+1-555-0456',
+        currentGPA: student ? (student.q1_avg_score + student.q2_avg_score + student.q3_avg_score) / 75 : 3.2,
+        riskLevel: student?.riskLevel || 'medium',
+        riskScore: student?.riskLevel === 'high' ? 75 : student?.riskLevel === 'medium' ? 45 : 25,
+        attendanceRate: student?.['Attendance%'] || 78,
+        subjects: [
+          { 
+            name: 'Quiz 1', 
+            grade: student?.q1_avg_score || 75, 
+            attempts: student?.q1_Attempts_Used || 2, 
+            status: (student?.q1_avg_score || 75) >= 80 ? 'passing' : (student?.q1_avg_score || 75) >= 60 ? 'warning' : 'failing'
+          },
+          { 
+            name: 'Quiz 2', 
+            grade: student?.q2_avg_score || 82, 
+            attempts: student?.q2_Attempts_Used || 1, 
+            status: (student?.q2_avg_score || 82) >= 80 ? 'passing' : (student?.q2_avg_score || 82) >= 60 ? 'warning' : 'failing'
+          },
+          { 
+            name: 'Quiz 3', 
+            grade: student?.q3_avg_score || 68, 
+            attempts: student?.q3_Attempts_Used || 3, 
+            status: (student?.q3_avg_score || 68) >= 80 ? 'passing' : (student?.q3_avg_score || 68) >= 60 ? 'warning' : 'failing'
+          }
+        ],
+        riskFactors: [
+          ...(student?.['Attendance%'] && student['Attendance%'] < 80 ? [
+            { factor: 'Poor Attendance', severity: student['Attendance%'] < 60 ? 'high' : 'medium' as 'high' | 'medium' | 'low', weight: 0.35 }
+          ] : []),
+          ...(student && (student.q1_avg_score + student.q2_avg_score + student.q3_avg_score) / 3 < 75 ? [
+            { factor: 'Academic Performance', severity: 'medium' as 'high' | 'medium' | 'low', weight: 0.4 }
+          ] : []),
+          ...(student?.Fee_Due_Days && student.Fee_Due_Days > 0 ? [
+            { factor: 'Fee Payment Issues', severity: student.Fee_Due_Days > 15 ? 'high' : 'low' as 'high' | 'medium' | 'low', weight: 0.25 }
+          ] : [])
+        ]
+      };
+      
+      console.log('Generated demo student detail:', demoDetails);
+      return demoDetails;
     }
-    
-    // Generate realistic demo data based on the student
-    const demoDetails: StudentDetail = {
-      id: studentId,
-      name: student?.name || 'Demo Student',
-      studentId: student?.studentId || studentId,
-      class: 'Class A',
-      batch: '2024',
-      program: student?.program || 'Computer Science',
-      email: `${student?.studentId || studentId}@student.edu`,
-      phone: '+1-555-0123',
-      mentorEmail: 'mentor@institution.edu',
-      parentEmail: 'parent@email.com',
-      parentPhone: '+1-555-0456',
-      currentGPA: student ? (student.q1_avg_score + student.q2_avg_score + student.q3_avg_score) / 75 : 3.2,
-      riskLevel: student?.riskLevel || 'medium',
-      riskScore: student?.riskLevel === 'high' ? 75 : student?.riskLevel === 'medium' ? 45 : 25,
-      attendanceRate: student?.['Attendance%'] || 78,
-      subjects: [
-        { 
-          name: 'Quiz 1', 
-          grade: student?.q1_avg_score || 75, 
-          attempts: student?.q1_Attempts_Used || 2, 
-          status: (student?.q1_avg_score || 75) >= 80 ? 'passing' : (student?.q1_avg_score || 75) >= 60 ? 'warning' : 'failing'
-        },
-        { 
-          name: 'Quiz 2', 
-          grade: student?.q2_avg_score || 82, 
-          attempts: student?.q2_Attempts_Used || 1, 
-          status: (student?.q2_avg_score || 82) >= 80 ? 'passing' : (student?.q2_avg_score || 82) >= 60 ? 'warning' : 'failing'
-        },
-        { 
-          name: 'Quiz 3', 
-          grade: student?.q3_avg_score || 68, 
-          attempts: student?.q3_Attempts_Used || 3, 
-          status: (student?.q3_avg_score || 68) >= 80 ? 'passing' : (student?.q3_avg_score || 68) >= 60 ? 'warning' : 'failing'
-        }
-      ],
-      riskFactors: [
-        ...(student?.['Attendance%'] && student['Attendance%'] < 80 ? [
-          { factor: 'Poor Attendance', severity: student['Attendance%'] < 60 ? 'high' : 'medium' as 'high' | 'medium' | 'low', weight: 0.35 }
-        ] : []),
-        ...(student && (student.q1_avg_score + student.q2_avg_score + student.q3_avg_score) / 3 < 75 ? [
-          { factor: 'Academic Performance', severity: 'medium' as 'high' | 'medium' | 'low', weight: 0.4 }
-        ] : []),
-        ...(student?.Fee_Due_Days && student.Fee_Due_Days > 0 ? [
-          { factor: 'Fee Payment Issues', severity: student.Fee_Due_Days > 15 ? 'high' : 'low' as 'high' | 'medium' | 'low', weight: 0.25 }
-        ] : [])
-      ]
-    };
-    
-    console.log('Generated demo student detail:', demoDetails);
-    return demoDetails;
   };
 
-  // Initialize with demo data (backend disabled for now)
+  // Initialize data - try backend first, fallback to demo
   useEffect(() => {
-    console.log('Initializing with demo data...');
+    console.log('Initializing student data...');
     
-    // Simulate loading delay
-    setTimeout(() => {
-      // Set comprehensive demo data
-      setStudents([
-        {
-          id: '1',
-          name: 'Alice Johnson',
-          studentId: 'ST001',
-          program: 'Computer Science',
-          'Attendance%': 92,
-          q1_avg_score: 85,
-          q2_avg_score: 78,
-          q3_avg_score: 88,
-          q1_trend: 0.15,
-          q2_trend: -0.05,
-          q3_trend: 0.12,
-          q1_Attempts_Used: 2,
-          q2_Attempts_Used: 3,
-          q3_Attempts_Used: 1,
-          Fee_Paid: 100,
-          Fee_Due_Days: 0,
-          high_risk: 0,
-          medium_risk: 0,
-          low_risk: 1,
-          riskLevel: 'low'
-        },
-        {
-          id: '2',
-          name: 'Bob Smith',
-          studentId: 'ST002',
-          program: 'Engineering',
-          'Attendance%': 65,
-          q1_avg_score: 72,
-          q2_avg_score: 68,
-          q3_avg_score: 70,
-          q1_trend: -0.08,
-          q2_trend: -0.12,
-          q3_trend: 0.03,
-          q1_Attempts_Used: 3,
-          q2_Attempts_Used: 3,
-          q3_Attempts_Used: 2,
-          Fee_Paid: 80,
-          Fee_Due_Days: 15,
-          high_risk: 1,
-          medium_risk: 0,
-          low_risk: 0,
-          riskLevel: 'high'
-        },
-        {
-          id: '3',
-          name: 'Carol Davis',
-          studentId: 'ST003',
-          program: 'Mathematics',
-          'Attendance%': 88,
-          q1_avg_score: 79,
-          q2_avg_score: 82,
-          q3_avg_score: 84,
-          q1_trend: 0.05,
-          q2_trend: 0.08,
-          q3_trend: 0.10,
-          q1_Attempts_Used: 2,
-          q2_Attempts_Used: 2,
-          q3_Attempts_Used: 1,
-          Fee_Paid: 100,
-          Fee_Due_Days: 0,
-          high_risk: 0,
-          medium_risk: 0,
-          low_risk: 1,
-          riskLevel: 'low'
-        },
-        {
-          id: '4',
-          name: 'David Wilson',
-          studentId: 'ST004',
-          program: 'Physics',
-          'Attendance%': 75,
-          q1_avg_score: 76,
-          q2_avg_score: 74,
-          q3_avg_score: 78,
-          q1_trend: -0.02,
-          q2_trend: -0.05,
-          q3_trend: 0.07,
-          q1_Attempts_Used: 2,
-          q2_Attempts_Used: 3,
-          q3_Attempts_Used: 2,
-          Fee_Paid: 90,
-          Fee_Due_Days: 5,
-          high_risk: 0,
-          medium_risk: 1,
-          low_risk: 0,
-          riskLevel: 'medium'
-        },
-        {
-          id: '5',
-          name: 'Emma Brown',
-          studentId: 'ST005',
-          program: 'Chemistry',
-          'Attendance%': 94,
-          q1_avg_score: 91,
-          q2_avg_score: 89,
-          q3_avg_score: 93,
-          q1_trend: 0.12,
-          q2_trend: 0.08,
-          q3_trend: 0.15,
-          q1_Attempts_Used: 1,
-          q2_Attempts_Used: 2,
-          q3_Attempts_Used: 1,
-          Fee_Paid: 100,
-          Fee_Due_Days: 0,
-          high_risk: 0,
-          medium_risk: 0,
-          low_risk: 1,
-          riskLevel: 'low'
-        },
-        {
-          id: '6',
-          name: 'Frank Miller',
-          studentId: 'ST006',
-          program: 'Biology',
-          'Attendance%': 58,
-          q1_avg_score: 64,
-          q2_avg_score: 61,
-          q3_avg_score: 59,
-          q1_trend: -0.15,
-          q2_trend: -0.18,
-          q3_trend: -0.22,
-          q1_Attempts_Used: 3,
-          q2_Attempts_Used: 3,
-          q3_Attempts_Used: 3,
-          Fee_Paid: 60,
-          Fee_Due_Days: 30,
-          high_risk: 1,
-          medium_risk: 0,
-          low_risk: 0,
-          riskLevel: 'high'
+    // Try to fetch from backend
+    fetch('http://localhost:5000/students_df')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: Failed to fetch student data`);
         }
-      ]);
-      
-      // Set sample alerts
-      setAlerts([
-        {
-          id: 'alert1',
-          studentId: '2',
-          title: 'Critical Attendance Alert',
-          message: 'Bob Smith attendance has dropped to 65% - immediate intervention required',
-          severity: 'high',
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          resolved: false
-        },
-        {
-          id: 'alert2',
-          studentId: '6',
-          title: 'Academic Performance Warning',
-          message: 'Frank Miller showing consistent decline in all subjects',
-          severity: 'high',
-          timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          resolved: false
-        },
-        {
-          id: 'alert3',
-          studentId: '4',
-          title: 'Fee Payment Reminder',
-          message: 'David Wilson fee payment is 5 days overdue',
-          severity: 'medium',
-          timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-          resolved: false
-        },
-        {
-          id: 'alert4',
-          studentId: '2',
-          title: 'Quiz Attempt Limit Reached',
-          message: 'Bob Smith has used all attempts for Q1 and Q2',
-          severity: 'medium',
-          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          resolved: false
-        },
-        {
-          id: 'alert5',
-          studentId: '1',
-          title: 'Performance Improvement',
-          message: 'Alice Johnson shows positive trend in Q3 performance',
-          severity: 'low',
-          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          resolved: false
-        }
-      ]);
-      
-      setLoading(false);
-      setError(null);
-      console.log('✅ Demo data initialized successfully!');
-    }, 1000); // 1 second loading simulation
+        return response.json();
+      })
+      .then(data => {
+        console.log('Raw backend data received:', data);
+        console.log('Number of records:', data?.length);
+        
+        const processedStudents = processStudentData(data);
+        console.log('Processed students:', processedStudents);
+        console.log('Number of processed students:', processedStudents.length);
+        
+        setStudents(processedStudents);
+        setLoading(false);
+        setError(null);
+        console.log('✅ Backend data loaded successfully!');
+      })
+      .catch(err => {
+        console.error('Error fetching backend data:', err);
+        console.log('Falling back to demo data...');
+        
+        // Set comprehensive demo data on backend error
+        setTimeout(() => {
+          setStudents([
+            {
+              id: '1',
+              name: 'Alice Johnson',
+              studentId: 'ST001',
+              program: 'Computer Science',
+              'Attendance%': 92,
+              q1_avg_score: 85,
+              q2_avg_score: 78,
+              q3_avg_score: 88,
+              q1_trend: 0.15,
+              q2_trend: -0.05,
+              q3_trend: 0.12,
+              q1_Attempts_Used: 2,
+              q2_Attempts_Used: 3,
+              q3_Attempts_Used: 1,
+              Fee_Paid: 100,
+              Fee_Due_Days: 0,
+              high_risk: 0,
+              medium_risk: 0,
+              low_risk: 1,
+              riskLevel: 'low'
+            },
+            {
+              id: '2',
+              name: 'Bob Smith',
+              studentId: 'ST002',
+              program: 'Engineering',
+              'Attendance%': 65,
+              q1_avg_score: 72,
+              q2_avg_score: 68,
+              q3_avg_score: 70,
+              q1_trend: -0.08,
+              q2_trend: -0.12,
+              q3_trend: 0.03,
+              q1_Attempts_Used: 3,
+              q2_Attempts_Used: 3,
+              q3_Attempts_Used: 2,
+              Fee_Paid: 80,
+              Fee_Due_Days: 15,
+              high_risk: 1,
+              medium_risk: 0,
+              low_risk: 0,
+              riskLevel: 'high'
+            },
+            {
+              id: '3',
+              name: 'Carol Davis',
+              studentId: 'ST003',
+              program: 'Mathematics',
+              'Attendance%': 88,
+              q1_avg_score: 79,
+              q2_avg_score: 82,
+              q3_avg_score: 84,
+              q1_trend: 0.05,
+              q2_trend: 0.08,
+              q3_trend: 0.10,
+              q1_Attempts_Used: 2,
+              q2_Attempts_Used: 2,
+              q3_Attempts_Used: 1,
+              Fee_Paid: 100,
+              Fee_Due_Days: 0,
+              high_risk: 0,
+              medium_risk: 0,
+              low_risk: 1,
+              riskLevel: 'low'
+            },
+            {
+              id: '4',
+              name: 'David Wilson',
+              studentId: 'ST004',
+              program: 'Physics',
+              'Attendance%': 75,
+              q1_avg_score: 76,
+              q2_avg_score: 74,
+              q3_avg_score: 78,
+              q1_trend: -0.02,
+              q2_trend: -0.05,
+              q3_trend: 0.07,
+              q1_Attempts_Used: 2,
+              q2_Attempts_Used: 3,
+              q3_Attempts_Used: 2,
+              Fee_Paid: 90,
+              Fee_Due_Days: 5,
+              high_risk: 0,
+              medium_risk: 1,
+              low_risk: 0,
+              riskLevel: 'medium'
+            },
+            {
+              id: '5',
+              name: 'Emma Brown',
+              studentId: 'ST005',
+              program: 'Chemistry',
+              'Attendance%': 94,
+              q1_avg_score: 91,
+              q2_avg_score: 89,
+              q3_avg_score: 93,
+              q1_trend: 0.12,
+              q2_trend: 0.08,
+              q3_trend: 0.15,
+              q1_Attempts_Used: 1,
+              q2_Attempts_Used: 2,
+              q3_Attempts_Used: 1,
+              Fee_Paid: 100,
+              Fee_Due_Days: 0,
+              high_risk: 0,
+              medium_risk: 0,
+              low_risk: 1,
+              riskLevel: 'low'
+            },
+            {
+              id: '6',
+              name: 'Frank Miller',
+              studentId: 'ST006',
+              program: 'Biology',
+              'Attendance%': 58,
+              q1_avg_score: 64,
+              q2_avg_score: 61,
+              q3_avg_score: 59,
+              q1_trend: -0.15,
+              q2_trend: -0.18,
+              q3_trend: -0.22,
+              q1_Attempts_Used: 3,
+              q2_Attempts_Used: 3,
+              q3_Attempts_Used: 3,
+              Fee_Paid: 60,
+              Fee_Due_Days: 30,
+              high_risk: 1,
+              medium_risk: 0,
+              low_risk: 0,
+              riskLevel: 'high'
+            }
+          ]);
+          
+          // Set sample alerts
+          setAlerts([
+            {
+              id: 'alert1',
+              studentId: '2',
+              title: 'Critical Attendance Alert',
+              message: 'Bob Smith attendance has dropped to 65% - immediate intervention required',
+              severity: 'high',
+              timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+              resolved: false
+            },
+            {
+              id: 'alert2',
+              studentId: '6',
+              title: 'Academic Performance Warning',
+              message: 'Frank Miller showing consistent decline in all subjects',
+              severity: 'high',
+              timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+              resolved: false
+            },
+            {
+              id: 'alert3',
+              studentId: '4',
+              title: 'Fee Payment Reminder',
+              message: 'David Wilson fee payment is 5 days overdue',
+              severity: 'medium',
+              timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+              resolved: false
+            },
+            {
+              id: 'alert4',
+              studentId: '2',
+              title: 'Quiz Attempt Limit Reached',
+              message: 'Bob Smith has used all attempts for Q1 and Q2',
+              severity: 'medium',
+              timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+              resolved: false
+            },
+            {
+              id: 'alert5',
+              studentId: '1',
+              title: 'Performance Improvement',
+              message: 'Alice Johnson shows positive trend in Q3 performance',
+              severity: 'low',
+              timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+              resolved: false
+            }
+          ]);
+          
+          setLoading(false);
+          setError(`Backend unavailable: ${err.message}. Using demo data.`);
+          console.log('✅ Demo fallback data loaded successfully!');
+        }, 1000); // 1 second loading simulation
+      });
   }, []);
 
   const addStudent = (studentData: Omit<Student, 'id'>) => {
