@@ -11,3 +11,4 @@ flask-security-too
 flask-jwt-extended
 flask-restful
 bcrypt
+Gunicorn
