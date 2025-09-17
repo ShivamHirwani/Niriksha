@@ -151,7 +151,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           <div className="flex items-center justify-between h-20">
             {/* Logo and Brand - Left Section */}
             <div className="flex items-center min-w-0 flex-shrink-0">
-              <div className="gradient-primary p-3 rounded-2xl shadow-glass transform hover:scale-101 transition-smooth" role="img" aria-label="EduWatch Logo">
+              <div className="gradient-primary p-3 rounded-2xl shadow-glass transform hover:scale-101 transition-smooth" role="img" aria-label="Niriksha Logo">
                 <GraduationCap className="w-7 h-7 text-white" aria-hidden="true" />
               </div>
             </div>
