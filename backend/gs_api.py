@@ -1,4 +1,4 @@
-import os
+import os, json
 import datetime
 import numpy as np
 import pandas as pd
@@ -9,22 +9,49 @@ import joblib
 from sklearn.preprocessing import LabelEncoder
 import json
 from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
 
+
+
+# Load environment variables
 load_dotenv()
 
-## Connect to Supabase
-supabase = create_client(os.getenv('SUPABASE_PROJECT_URL'), os.getenv('SUPABASE_API_KEY'))
-
-## --- Fix for Render: load Google credentials from ENV instead of file ---
+# Load service account JSON from env (Render safe way)
 service_account_info = json.loads(os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON"))
-credentials = Credentials.from_service_account_info(service_account_info)
+
+
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
+]
+
+creds_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+
+if creds_json:  
+    # Render (from env)
+    service_account_info = json.loads(creds_json)
+    credentials = service_account.Credentials.from_service_account_info(
+        service_account_info, scopes=SCOPES
+    )
+else:
+    creds = Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+    gc = gspread.authorize(creds)
+    
 
 # gspread auth
 gc = gspread.authorize(credentials)
 
+
+
+## we are gonna use Supabase--> Postgres + API + Auth + File Storage (backend-as-a-service).
+# Free tier: 500 MB DB storage, 50k monthly requests.
+#1. connect to supabase
+supabase= create_client(os.getenv('SUPABASE_PROJECT_URL'), os.getenv('SUPABASE_API_KEY'))
+
+
 # Loop through Google Sheets
 for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
-    sheet = gc.open(f"{sheet_name}").get_worksheet(0)
+    sheet = gc.open(sheet_name).get_worksheet(0)
     records = sheet.get_all_records()
     df = pd.DataFrame(records)
 
