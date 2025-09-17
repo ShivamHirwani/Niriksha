@@ -102,9 +102,9 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
     return rawData.map((row, index) => {
       // Determine risk level based on the risk columns
       let riskLevel: 'high' | 'medium' | 'low' = 'low';
-      if (row.high_risk === 1) riskLevel = 'high';
-      else if (row.medium_risk === 1) riskLevel = 'medium';
-      else if (row.low_risk === 1) riskLevel = 'low';
+      if (row.high_risk >= 95) riskLevel = 'high';
+      else if (row.medium_risk >= 95) riskLevel = 'medium';
+      else if (row.low_risk >=80) riskLevel = 'low';
 
       return {
         id: row.student_id || `student_${index}`,
@@ -167,7 +167,7 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
     // Get student's attendance data
     const studentAttendance = attendanceData.filter(att => att.student_id === rawData.student_id);
     const attendanceRate = studentAttendance.length > 0 
-      ? studentAttendance.reduce((sum, att) => sum + (att.present ? 1 : 0), 0) / studentAttendance.length * 100
+      ? studentAttendance.reduce((sum, att) => sum + (att.classes_attended >0 ? 1 : 0), 0) / studentAttendance.length * 100
       : 85; // Default attendance rate
 
     // Get student's assessment data
@@ -275,7 +275,7 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
       const [studentsInfoResponse, attendanceResponse, studentsDataResponse, feesResponse] = await Promise.all([
         fetch('http://localhost:5000/students_info'),    // For basic info, mentor_email, parent_email, parent_phone
         fetch('http://localhost:5000/attendance_info'),   // For attendance with 'date' feature
-        fetch('http://localhost:5000/students_df'),       // For Q1, Q2, Q3 academic data and attempts
+        fetch('http://localhost:5000/assessments_info'),       // For Q1, Q2, Q3 academic data and attempts
         fetch('http://localhost:5000/fees_info')          // For fee information
       ]);
 
@@ -284,9 +284,12 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
       const studentsDataData = await studentsDataResponse.json();
       const feesData = await feesResponse.json();
 
+
       // Find the specific student in students_info (basic info)
-      const studentInfoData = studentsInfoData.find((student: any) => student.student_id === studentId);
+      const studentInfoData = studentsInfoData.find((student: any) => console.log(studentId));
+      // const studentInfoData = studentsInfoData.find((student: any) => student.student_id === studentId);
       
+
       // Find the same student in students_df (academic data)
       const studentAcademicData = studentsDataData.find((student: any) => student.student_id === studentId);
       
@@ -384,7 +387,7 @@ export const StudentProvider: React.FC<StudentProviderProps> = ({ children }) =>
             q1_Attempts_Used: 2,
             q2_Attempts_Used: 3,
             q3_Attempts_Used: 1,
-            Fee_Paid: 100,
+            Fee_Paid: 1,
             Fee_Due_Days: 0,
             high_risk: 0,
             medium_risk: 0,

@@ -30,7 +30,7 @@ const StudentListWidget: React.FC<StudentListWidgetProps> = ({ onViewStudent }) 
     'q1_Attempts_Used': { good: 2, warning: 4 },
     'q2_Attempts_Used': { good: 2, warning: 4 },
     'q3_Attempts_Used': { good: 2, warning: 4 },
-    'Fee_Paid': { good: 100, warning: 50 },
+    'Fee_Paid': { good: 1, warning: 0.5 },
     'Fee_Due_Days': { good: 0, warning: 30 },
   };
 
@@ -70,10 +70,12 @@ const StudentListWidget: React.FC<StudentListWidgetProps> = ({ onViewStudent }) 
       if (field.includes('trend')) {
         return value >= 0 ? `+${value.toFixed(2)}` : value.toFixed(2);
       }
-      if (field === 'Attendance%' || field === 'Fee_Paid') {
+      if (field === 'Attendance%') {
         return `${value.toFixed(1)}%`;
       }
-      return value.toFixed(1);
+      if (field!='Fee_Paid' || !field.includes('Attempts')){
+      value.toFixed(1);
+      }
     }
     return value;
   };
