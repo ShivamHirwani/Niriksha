@@ -153,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
             {/* Logo and Brand - Left Section - Positioned at the leftmost side */}
             <div className="flex items-center min-w-0 flex-shrink-0">
               <div className="p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
-                <img src="/SIH2.png" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
+                <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
               </div>
               <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 flex items-center ml-3">
                 Niriksha
