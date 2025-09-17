@@ -2,55 +2,69 @@
 by Team AnveshanX
 ## Overview
 Niriksha is an AI-powered early warning dashboard built to predict student dropouts and facilitate timely interventions in technical educational institutions. Designed for the realities of Indian colleges, Niriksha merges attendance, grades, and fee data from Excel/CSV sources, highlights at-risk students, and sends crucial alerts to stakeholders without expensive analytics platforms or major IT changes.
-## Features
-Unified Dashboard: Consolidates attendance, grades, and fee/payment info for holistic student tracking.
 
-Early Risk Alerts: Color-coded notifications (Red, Orange, Yellow) for at-risk students driven by educator-configurable rules and AI.
+### Purpose
+This system facilitates access to mentorship and guidance using AI automation, streamlines communication between students and mentors, and provides risk assessment with early intervention capabilities through data analysis.
 
-Automated Notifications: Sends alerts by Email, SMS, or WhatsApp to counselors, parents, and mentors.
+### Key Features
+- **User Authentication**: Secure login system for students, teachers, counselors, and administrators
+- **Student Data Management**: Comprehensive student profile and performance tracking
+- **Risk Assessment**: AI-driven analysis to identify students at risk of dropping out
+- **Dashboard Monitoring**: Real-time visualization of student status and alerts
+- **Email Notifications**: Automated communication system for mentors
+- **PWA Support**: Offline accessibility through Progressive Web App technology
+- **Data Import/Export**: Easy data management capabilities
 
-CSV-First Design: Integrates with existing spreadsheet/Excel-based workflows; no new infrastructure needed.
+## 🛠️ Technology Stack
 
-User-Configurable: Educators set risk thresholds via an intuitive interface.
+### Frontend
+- **Framework**: React with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: React Context API
+- **PWA**: Service workers and manifest for offline support
 
-Scalable & Modular: Built for seamless pilots and large state-wide rollouts.
+### Backend
+- **Language**: Python
+- **Framework**: Flask
+- **Database**: SQLAlchemy (ORM)
+- **Authentication**: JWT-based security
+- **Email**: SMTP with templating system
 
-Compliance Ready: Role-based access with optional auditing and anonymization.
+## 🚀 Setup Instructions
 
-Roadmap for AI: Hybrid Rule+ML, UDISE+/ShalaDarpan compatibility for future expansion.
+### Prerequisites
+- Node.js 16+
+- Python 3.x
+- npm/yarn package manager
 
-## Tech Stack
-Backend: Python, Flask, Pandas, Scikit-learn, Celery, PostgreSQL/SQLite
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-Frontend: React.js, TypeScript, Tailwind CSS, Vite
+### Backend Setup
+```bash
+cd backend
+pip install -r requirements.txt
+python app.py
+```
 
-Notifications: Twilio (SMS), WhatsApp Business API, SendGrid (Email)
+### Environment Variables
+Create a `.env` file in the backend directory with the following variables:
+```
+SECRET_KEY=your_secret_key
+DATABASE_URL=your_database_url
+SMTP_SERVER=your_smtp_server
+SMTP_PORT=your_smtp_port
+EMAIL_USER=your_email_user
+EMAIL_PASSWORD=your_email_password
+```
+## 🏗️ Development
 
-Deployment: Vercel
-
-Supported Formats: .csv, .xlsx
-
-## Installation & Deployment
-### Frontend Deployment (Vercel)
-
-Login to Vercel
-
-Visit vercel.com and sign in with your GitHub/GitLab/Bitbucket account.
-
-Import Your Repository
-
-Click on “New Project” and select your Niriksha frontend repository from your account.
-
-Add Environment Variables
-
-During the project setup, add the required environment variables in the Vercel dashboard (API URLs, authentication keys, etc.).
-
-Create Deployment
-
-Click “Deploy” to build and launch your frontend application.
-
-Your site will be live at a unique Vercel URL (e.g., https://niriksha.vercel.app).
-
+### Building for Production
 ### Backend Deployment (Render)
 Login to Render
 
@@ -83,6 +97,52 @@ The Niriksha is live and accessible at:
 https://niriksha-zeta.vercel.app
 
 Visit the live site to explore core features, dashboard, and see real-time risk alerts in action.
+
+### Project Structure
+```
+AI-Counselling-System/
+├── backend/
+│   ├── application/
+│   │   ├── api.py          # Core API routes
+│   │   ├── auth.py         # Authentication logic
+│   │   ├── models.py       # Database models
+│   │   ├── students_func.py # Student-related business logic
+│   │   ├── mail_to_mentor.py # Email notification system
+│   │   └── utils.py        # Utility functions
+│   └── app.py              # Main application entry point
+└── frontend/
+    ├── src/
+    │   ├── components/     # UI components
+    │   ├── context/        # State management
+    │   ├── hooks/          # Custom React hooks
+    │   ├── services/       # API services
+    │   └── utils/          # Utility functions
+    └── public/             # Static assets
+```
+
+## 🔧 Key Components
+
+### Frontend Components
+- **Dashboard**: Main overview with analytics and metrics
+- **Student Management**: List and detail views for student data
+- **Risk Assessment**: Visualization of student risk levels
+- **Alerts System**: Notification management
+- **Data Import**: CSV/excel data import functionality
+- **Reports**: Generate and export reports
+
+### Backend Modules
+- **API Layer**: RESTful endpoints for frontend communication
+- **Authentication**: User registration and login system
+- **Student Functions**: Business logic for student data operations
+- **Email System**: Automated notification service
+- **Database Models**: ORM definitions for data persistence
+
+## 🔒 Security Features
+- JWT-based authentication
+- Secure password handling
+- Role-based access control
+- Data encryption for sensitive information
+
 ## Contact
 Contact
 Project Lead: 
@@ -90,3 +150,9 @@ Project Lead:
 Email: 
 
 Empowering institutions to predict, prevent, and reduce dropouts — one student at a time.
+
+## 📄 License
+This project is developed as part of the Smart India Hackathon and is intended for educational and demonstration purposes.
+
+## 📞 Support
+For issues and questions, please contact the development team through the SIH platform.
