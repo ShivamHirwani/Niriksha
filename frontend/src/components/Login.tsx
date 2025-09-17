@@ -26,9 +26,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
   const handleDemoLogin = (role: string) => {
     const demoCredentials = {
-      admin: { username: 'admin@eduwatch.com', password: 'admin123' },
-      counselor: { username: 'counselor@eduwatch.com', password: 'counselor123' },
-      teacher: { username: 'teacher@eduwatch.com', password: 'teacher123' }
+      admin: { username: 'admin@niriksha.com', password: 'admin123' },
+      counselor: { username: 'counselor@niriksha.com', password: 'counselor123' },
+      teacher: { username: 'teacher@niriksha.com', password: 'teacher123' }
     };
     
     const creds = demoCredentials[role as keyof typeof demoCredentials];
@@ -44,7 +44,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
           <div className="bg-blue-600 p-4 rounded-2xl inline-block mb-4 shadow-lg">
             <GraduationCap className="w-12 h-12 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">EduWatch</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Niriksha</h1>
           <p className="text-gray-600 dark:text-gray-400">AI-Powered Dropout Prevention System</p>
         </div>
 
@@ -138,7 +138,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
         {/* System Info */}
         <div className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>© 2024 EduWatch. Built for educational institutions.</p>
+          <p>© 2025 Niriksha. Built for educational institutions.</p>
         </div>
       </div>
     </div>
