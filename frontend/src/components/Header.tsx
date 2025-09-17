@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { GraduationCap, BarChart3, Users, Upload, Settings, LogOut, User, FileText, HelpCircle, Download, Wifi, WifiOff } from 'lucide-react';
+import { BarChart3, Users, Upload, Settings, LogOut, User, FileText, HelpCircle, Download, Wifi, WifiOff } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import InstallPrompt from './InstallPrompt';
@@ -151,13 +151,13 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           <div className="flex items-center justify-between h-20">
             {/* Logo and Brand - Left Section */}
             <div className="flex items-center min-w-0 flex-shrink-0">
-              <div className="gradient-primary p-3 rounded-2xl shadow-glass transform hover:scale-101 transition-smooth" role="img" aria-label="Niriksha Logo">
-                <GraduationCap className="w-7 h-7 text-white" aria-hidden="true" />
+              <div className="p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
+                <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-12 h-12 object-contain" />
               </div>
             </div>
 
             {/* Main Navigation - Center Section */}
-            <nav className="hidden lg:flex items-center justify-center flex-1 mx-8" 
+            <nav className="hidden lg:flex items-center justify-center flex-1 mx-4" 
                  role="navigation" 
                  aria-label="Main menu">
               <div className="flex items-center space-x-2 bg-opacity-50 rounded-2xl p-2" 
