@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GraduationCap, Eye, EyeOff, User, Lock } from 'lucide-react';
+import { Eye, EyeOff, User, Lock } from 'lucide-react';
 
 interface LoginProps {
   onLogin: (credentials: { username: string; password: string }) => void;
@@ -41,8 +41,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       <div className="max-w-md w-full">
         {/* Logo and Header */}
         <div className="text-center mb-8">
-          <div className="bg-blue-600 p-4 rounded-2xl inline-block mb-4 shadow-lg">
-            <GraduationCap className="w-12 h-12 text-white" />
+          <div className="p-2 rounded-2xl inline-block mb-4 shadow-lg bg-white dark:bg-gray-900">
+            <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Niriksha</h1>
           <p className="text-gray-600 dark:text-gray-400">AI-Powered Dropout Prevention System</p>
