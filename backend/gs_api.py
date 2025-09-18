@@ -102,20 +102,55 @@ for sheet_name in ['Students', 'Attendance Data', 'Assessments', 'Fees']:
         supabase.table('assessments').insert(rows_to_insert).execute()
 
     else:
+        # fees_df = df
+        # supabase.table('fees').delete().neq("student_id", "").execute()
+        # df = df.astype(object).where(pd.notnull(df), None)
+
+        # rows_to_insert=[]
+        # for _, row in df.iterrows():
+        #     rows_to_insert.append({
+        #         'id':str(row['id']),
+        #         'student_id':int(row['student_id']),
+        #         'fee_status': str(row['fee_status']),
+        #         'fee_due_amount': int(row['fee_due_amount']),
+        #         'fee_due_date': int(row['fee_due_date'])
+        #     })
+        # supabase.table('fees').insert(rows_to_insert).execute()
+
+        # Keep a copy if you need it later
         fees_df = df
+
+        # Delete old data (except rows where student_id is empty)
         supabase.table('fees').delete().neq("student_id", "").execute()
+
+        # Replace NaNs with None (for Supabase insert)
         df = df.astype(object).where(pd.notnull(df), None)
 
-        rows_to_insert=[]
+        # Helper to safely convert to int or return None
+        def safe_int(value):
+            if value in (None, '', 'NaN'):
+                return None
+            return int(value)
+
+        rows_to_insert = []
+
         for _, row in df.iterrows():
+            # Skip rows where student_id is empty
+            if row['student_id'] in (None, '', 'NaN'):
+                continue
+
             rows_to_insert.append({
-                'id':str(row['id']),
-                'student_id':int(row['student_id']),
+                'id': str(row['id']),
+                'student_id': safe_int(row['student_id']),
                 'fee_status': str(row['fee_status']),
-                'fee_due_amount': int(row['fee_due_amount']),
-                'fee_due_date': int(row['fee_due_date'])
+                'fee_due_amount': safe_int(row['fee_due_amount']),
+                'fee_due_date': safe_int(row['fee_due_date'])
             })
-        supabase.table('fees').insert(rows_to_insert).execute()
+
+        # Insert valid rows only
+        if rows_to_insert:
+            supabase.table('fees').insert(rows_to_insert).execute()
+
 
 
 
