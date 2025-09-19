@@ -167,13 +167,8 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           <div className="flex items-center justify-between h-16 sm:h-20">
             {/* Logo and Brand - Left Section */}
             <div className="flex items-center min-w-0 flex-shrink-0">
-<<<<<<< HEAD
-              <div className="p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
-                <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
-=======
               <div className="p-1.5 sm:p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
                 <img src="./SIH2.webp" alt="Smart India Hackathon Logo" className="w-8 h-8 sm:w-12 sm:h-12 object-contain" />
->>>>>>> aff2adfc (Maked smartphone friendly)
               </div>
               <h1 className="text-lg sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 flex items-center ml-2 sm:ml-3">
                 Niriksha

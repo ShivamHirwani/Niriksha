@@ -42,11 +42,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         {/* Logo and Header */}
         <div className="text-center mb-8">
           <div className="p-2 rounded-2xl inline-block mb-4 shadow-lg bg-white dark:bg-gray-900">
-<<<<<<< HEAD
-          <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-12 h-12 object-contain" />
-=======
             <img src="./SIH2.webp" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
->>>>>>> aff2adfc (Maked smartphone friendly)
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Niriksha</h1>
           <p className="text-gray-600 dark:text-gray-400">AI-Powered Dropout Prevention System</p>
