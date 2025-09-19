@@ -14,25 +14,27 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewStudent }) => {
   const { students } = useStudentContext();
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-6 sm:space-y-8 animate-fade-in">
       {/* 🚀 Quick Stats with Enhanced Animation */}
       <div className="animate-slide-in-right" style={{ animationDelay: '0.1s' }}>
         <QuickStats />
       </div>
       
-      {/* 📊 Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {/* 📊 Main Content Grid - Responsive layout */}
+      <div className="grid grid-cols-1 gap-6 sm:gap-8">
         {/* Trend Chart - Full Width */}
-        <div className="lg:col-span-2 animate-scale-in" style={{ animationDelay: '0.2s' }}>
+        <div className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
           <TrendChart />
         </div>
         
-        {/* Risk Overview & Recent Alerts */}
-        <div className="animate-slide-in-right" style={{ animationDelay: '0.3s' }}>
-          <RiskOverview onViewStudent={onViewStudent} />
-        </div>
-        <div className="animate-slide-in-right" style={{ animationDelay: '0.4s' }}>
-          <RecentAlerts onViewStudent={onViewStudent} />
+        {/* Risk Overview & Recent Alerts - Stacked on mobile, side-by-side on larger screens */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div className="animate-slide-in-right" style={{ animationDelay: '0.3s' }}>
+            <RiskOverview onViewStudent={onViewStudent} />
+          </div>
+          <div className="animate-slide-in-right" style={{ animationDelay: '0.4s' }}>
+            <RecentAlerts onViewStudent={onViewStudent} />
+          </div>
         </div>
       </div>
       

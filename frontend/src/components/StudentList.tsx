@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import { useStudentContext } from '../context/StudentContext';
-import { Search, AlertTriangle, Clock, CheckCircle, Eye, Filter, Download, Plus } from 'lucide-react';
+import { Search, AlertTriangle, Clock, CheckCircle, Eye, Filter, Download, Plus, ChevronDown, ChevronUp } from 'lucide-react';
+
+interface Student {
+  id: string;
+  name: string;
+  studentId: string;
+  program: string;
+  riskLevel: string;
+  'Attendance%': number;
+  Fee_Paid: number;
+  // Add other properties as needed
+}
+
+interface StudentListProps {
+  onSelectStudent: (id: string) => void;
+}
 
 // Step 1: This is our main StudentList component
 // It's like a full page that shows all students in a big table
-const StudentList = ({ onSelectStudent }) => {
+const StudentList: React.FC<StudentListProps> = ({ onSelectStudent }) => {
   // Step 2: Get student data from our context (the data storage)
   const { students, loading, error } = useStudentContext();
 
@@ -14,9 +29,10 @@ const StudentList = ({ onSelectStudent }) => {
   const [filterProgram, setFilterProgram] = useState('all'); // Which program to show
   const [sortBy, setSortBy] = useState('name'); // How to sort the table
   const [sortOrder, setSortOrder] = useState('asc'); // Ascending or descending
+  const [showFilters, setShowFilters] = useState(false); // Mobile filter toggle
 
   // Step 4: Filter and sort the students based on user choices
-  const filteredAndSortedStudents = students
+  const filteredAndSortedStudents = (students as Student[])
     .filter(student => {
       // Check if student matches search term (name or ID)
       const matchesSearch = student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,7 +48,7 @@ const StudentList = ({ onSelectStudent }) => {
     })
     .sort((a, b) => {
       // Sort students based on selected column
-      let aValue, bValue;
+      let aValue: string | number, bValue: string | number;
 
       switch (sortBy) {
         case 'name':
@@ -45,26 +61,27 @@ const StudentList = ({ onSelectStudent }) => {
           break;
         case 'risk':
           const riskOrder = { 'high': 3, 'medium': 2, 'low': 1 };
-          aValue = riskOrder[a.riskLevel];
-          bValue = riskOrder[b.riskLevel];
+          aValue = riskOrder[a.riskLevel as keyof typeof riskOrder];
+          bValue = riskOrder[b.riskLevel as keyof typeof riskOrder];
           break;
         default:
           aValue = a.name;
           bValue = b.name;
       }
 
-      if (typeof aValue === 'string') {
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
         return sortOrder === 'asc' ? aValue.localeCompare(bValue) : bValue.localeCompare(aValue);
-      } else {
+      } else if (typeof aValue === 'number' && typeof bValue === 'number') {
         return sortOrder === 'asc' ? aValue - bValue : bValue - aValue;
       }
+      return 0;
     });
 
   // Step 5: Get unique programs for the filter dropdown
-  const uniquePrograms = [...new Set(students.map(student => student.program))];
+  const uniquePrograms = [...new Set(students.map(student => (student as Student).program))];
 
   // Step 6: Helper functions to get colors and icons for risk levels
-  const getRiskIcon = (level) => {
+  const getRiskIcon = (level: string) => {
     switch (level) {
       case 'high': return AlertTriangle;
       case 'medium': return Clock;
@@ -72,7 +89,7 @@ const StudentList = ({ onSelectStudent }) => {
     }
   };
 
-  const getRiskBadgeColor = (level) => {
+  const getRiskBadgeColor = (level: string) => {
     switch (level) {
       case 'high': 
         return {
@@ -96,7 +113,7 @@ const StudentList = ({ onSelectStudent }) => {
   };
 
   // Step 7: Handle sorting when user clicks column header
-  const handleSort = (column) => {
+  const handleSort = (column: string) => {
     if (sortBy === column) {
       // If clicking same column, reverse order
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
@@ -139,16 +156,27 @@ const StudentList = ({ onSelectStudent }) => {
         </p>
       </div>
 
+      {/* Mobile Filter Toggle */}
+      <div className="lg:hidden">
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="flex items-center justify-between w-full p-4 bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800"
+        >
+          <span className="font-medium text-gray-900 dark:text-white">Filters & Search</span>
+          {showFilters ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </button>
+      </div>
+
       {/* Filters and Search Section */}
-      <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6">
+      <div className={`${showFilters ? 'block' : 'hidden'} lg:block bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-4 sm:p-6`}>
         <div className="flex items-center space-x-4 mb-4">
           <Filter className="w-5 h-5 text-gray-400" />
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">Filters & Search</h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Search Input */}
-          <div className="relative md:col-span-1">
+          <div className="relative sm:col-span-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
@@ -185,9 +213,10 @@ const StudentList = ({ onSelectStudent }) => {
         </div>
       </div>
 
-      {/* Students Table */}
+      {/* Students Table - Responsive Card Layout for Mobile */}
       <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             {/* Table Header */}
             <thead className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -296,7 +325,7 @@ const StudentList = ({ onSelectStudent }) => {
                         className="inline-flex items-center px-3 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-md transition-colors"
                       >
                         <Eye className="w-3 h-3 mr-1" />
-                        View Details
+                        <span className="hidden sm:inline">View Details</span>
                       </button>
                     </td>
                   </tr>
@@ -304,6 +333,83 @@ const StudentList = ({ onSelectStudent }) => {
               })}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden">
+          <div className="space-y-4 p-4">
+            {filteredAndSortedStudents.map((student) => {
+              const RiskIcon = getRiskIcon(student.riskLevel);
+              const riskBadgeColor = getRiskBadgeColor(student.riskLevel);
+
+              return (
+                <div 
+                  key={student.id} 
+                  className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-12 h-12 bg-blue-100 dark:bg-gray-800 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-base font-medium text-blue-600 dark:text-blue-300">
+                          {student.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{student.name}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">ID: {student.studentId}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{student.program}</p>
+                      </div>
+                    </div>
+                    <span 
+                      className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border"
+                      style={{
+                        backgroundColor: getRiskBadgeColor(student.riskLevel).backgroundColor,
+                        color: getRiskBadgeColor(student.riskLevel).color,
+                        borderColor: getRiskBadgeColor(student.riskLevel).borderColor
+                      }}
+                    >
+                      <RiskIcon className="w-3 h-3 mr-1" />
+                      {student.riskLevel}
+                    </span>
+                  </div>
+                  
+                  <div className="mt-4 grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Attendance</p>
+                      <p 
+                        className="text-sm font-medium"
+                        style={{
+                          color: student['Attendance%'] >= 90 ? 'var(--color-success-dark, #059669)' :
+                                 student['Attendance%'] >= 75 ? 'var(--color-warning-dark, #d97706)' : 
+                                 'var(--color-danger-dark, #dc2626)'
+                        }}
+                      >
+                        {student['Attendance%']}%
+                      </p>
+                    </div>
+                    
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Fee Status</p>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${student.Fee_Paid === 100 ? 'bg-green-100 text-green-800 dark:bg-gray-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-gray-900 dark:text-red-200'
+                        }`}>
+                        {student.Fee_Paid === 100 ? 'Paid' : 'Pending'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <button
+                      onClick={() => onSelectStudent(student.id)}
+                      className="w-full inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-gray-800 rounded-md transition-colors"
+                    >
+                      <Eye className="w-4 h-4 mr-2" />
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Empty State */}
@@ -317,7 +423,7 @@ const StudentList = ({ onSelectStudent }) => {
       </div>
 
       {/* Pagination Footer */}
-      <div className="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 px-6 py-4 flex items-center justify-between rounded-b-lg">
+      <div className="bg-white dark:bg-black border-t border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-4 flex items-center justify-between rounded-b-lg">
         <p className="text-sm text-gray-700 dark:text-gray-300">
           Showing {filteredAndSortedStudents.length} of {students.length} students
         </p>

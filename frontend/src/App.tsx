@@ -148,21 +148,21 @@ function AppContent() {
         onLogout={handleLogout}
       />
       
-      {/* Spacer for fixed header */}
-      <div className="h-20 lg:h-20"></div>
+      {/* Spacer for fixed header - responsive height */}
+      <div className="h-16 sm:h-20"></div>
       
       {/* Offline Indicator */}
       {!isOnline && (
-        <div className="sticky top-20 z-40 bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg">
-          <div className="w-full px-6 lg:px-8 py-3">
-            <div className="text-center text-sm font-medium">
+        <div className="sticky top-16 sm:top-20 z-40 bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
+            <div className="text-center text-xs sm:text-sm font-medium">
               ⚠️ You are currently offline. Some features may be limited.
             </div>
           </div>
         </div>
       )}
       
-      <main className="w-full px-6 lg:px-8 py-8 min-h-screen">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 min-h-screen">
         {/* Added max-w-7xl for better content alignment */}
         <div className="max-w-7xl mx-auto w-full">
           {renderContent()}

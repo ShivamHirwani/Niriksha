@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, Users, Upload, Settings, LogOut, User, FileText, HelpCircle, Download, Wifi, WifiOff } from 'lucide-react';
+import { BarChart3, Users, Upload, Settings, LogOut, User, FileText, HelpCircle, Download, Wifi, WifiOff, Menu, X } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 import KeyboardShortcutsModal from './KeyboardShortcutsModal';
 import InstallPrompt from './InstallPrompt';
@@ -21,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportDataType, setExportDataType] = useState<'students' | 'alerts'>('students');
   const [isOfflineNotificationShown, setIsOfflineNotificationShown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const { toggleTheme } = useTheme();
   const { students, alerts } = useStudentContext();
@@ -69,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
         if (installPrompt) {
           dismissInstallPrompt();
         }
+        setIsMobileMenuOpen(false);
       },
     },
     {
@@ -113,6 +115,14 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
       category: 'Navigation',
       action: () => onViewChange('report'),
     },
+    {
+      id: 'toggle-mobile-menu',
+      key: 'm',
+      ctrlKey: true,
+      description: 'Toggle mobile menu',
+      category: 'Navigation',
+      action: () => setIsMobileMenuOpen(!isMobileMenuOpen),
+    },
   ];
 
   // Register keyboard shortcuts
@@ -138,6 +148,11 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
     setShowExportModal(true);
   };
 
+  // Close mobile menu when view changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [activeView]);
+
   return (
     <>
       <header 
@@ -146,25 +161,30 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
         role="banner"
         aria-label="Main navigation"
       >
-        {/* Full width container with proper padding - removed mx-auto to allow full left alignment */}
-        <div className="w-full px-6 lg:px-8">
+        {/* Full width container with proper padding */}
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {/* Main header content with improved alignment */}
-          <div className="flex items-center justify-between h-20">
-            {/* Logo and Brand - Left Section - Positioned at the leftmost side */}
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            {/* Logo and Brand - Left Section */}
             <div className="flex items-center min-w-0 flex-shrink-0">
+<<<<<<< HEAD
               <div className="p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
                 <img src="/SIH2.webp" alt="Smart India Hackathon Logo" className="w-16 h-16 object-contain" />
+=======
+              <div className="p-1.5 sm:p-2 rounded-2xl shadow-glass transform hover:scale-105 transition-smooth" role="img" aria-label="Smart India Hackathon Logo">
+                <img src="./SIH2.webp" alt="Smart India Hackathon Logo" className="w-8 h-8 sm:w-12 sm:h-12 object-contain" />
+>>>>>>> aff2adfc (Maked smartphone friendly)
               </div>
-              <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 flex items-center ml-3">
+              <h1 className="text-lg sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 flex items-center ml-2 sm:ml-3">
                 Niriksha
               </h1>
             </div>
 
-            {/* Main Navigation - Center Section */}
-            <nav className="hidden lg:flex items-center justify-center flex-1 mx-8" 
+            {/* Desktop Navigation - Center Section */}
+            <nav className="hidden lg:flex items-center justify-center flex-1 mx-4 sm:mx-8" 
                  role="navigation" 
                  aria-label="Main menu">
-              <div className="flex items-center space-x-2 bg-opacity-50 rounded-2xl p-2" 
+              <div className="flex items-center space-x-1 sm:space-x-2 bg-opacity-50 rounded-2xl p-1 sm:p-2" 
                    style={{ backgroundColor: 'var(--bg-tertiary)' }}>
                 {navItems.map((item) => {
                   const Icon = item.icon;
@@ -173,7 +193,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                       key={item.id}
                       onClick={() => onViewChange(item.id)}
                       className={`
-                        flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all duration-200
+                        flex items-center space-x-2 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl transition-all duration-200
                         transform hover:scale-101 active:scale-98 focus:outline-none focus:ring-2 focus:ring-offset-2
                         ${activeView === item.id ? 'font-semibold shadow-lg scale-105' : 'hover:shadow-sm'}
                       `}
@@ -201,16 +221,32 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                       }}
                     >
                       <Icon className="w-4 h-4" aria-hidden="true" />
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <span className="hidden sm:inline text-sm font-medium">{item.label}</span>
                     </button>
                   );
                 })}
               </div>
             </nav>
 
-            {/* User Actions - Right Section */}
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 rounded-lg transition-all duration-200"
+                style={{ 
+                  color: 'var(--text-muted)',
+                  backgroundColor: 'var(--bg-tertiary)'
+                }}
+                aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+                aria-expanded={isMobileMenuOpen}
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            </div>
+
+            {/* User Actions - Right Section (Desktop) */}
             {user && (
-              <div className="flex items-center justify-end min-w-0 flex-shrink-0">
+              <div className="hidden lg:flex items-center justify-end min-w-0 flex-shrink-0">
                 {/* Action Buttons Group */}
                 <div className="flex items-center space-x-2 bg-opacity-50 rounded-xl p-1" 
                      style={{ backgroundColor: 'var(--bg-tertiary)' }}>
@@ -237,7 +273,7 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
                     <span className="hidden md:inline text-sm">Export</span>
                   </button>
 
-                  {/* Theme Toggle - Simplified with only the toggle button */}
+                  {/* Theme Toggle */}
                   <div className="px-1">
                     <ThemeToggle />
                   </div>
@@ -318,51 +354,109 @@ const Header: React.FC<HeaderProps> = ({ activeView, onViewChange, user, onLogou
           </div>
         </div>
         
-        {/* Mobile Navigation */}
-        <div className="lg:hidden border-t" style={{ borderColor: 'var(--border-primary)' }}>
-          <div className="px-6 py-3">
-            <div className="flex items-center justify-between space-x-2">
-              {navItems.slice(0, 4).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => onViewChange(item.id)}
-                    className={`
-                      flex flex-col items-center space-y-1 px-3 py-2 rounded-xl transition-all duration-200
-                      transform hover:scale-101 active:scale-98
-                      ${activeView === item.id ? 'font-semibold' : ''}
-                    `}
-                    style={{
-                      backgroundColor: activeView === item.id ? 'var(--color-primary-100)' : 'transparent',
-                      color: activeView === item.id ? 'var(--color-primary-600)' : 'var(--text-muted)'
-                    }}
-                  >
-                    <Icon className="w-5 h-5" aria-hidden="true" />
-                    <span className="text-xs">{item.label}</span>
-                  </button>
-                );
-              })}
+        {/* Mobile Navigation Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden border-t" style={{ borderColor: 'var(--border-primary)', backgroundColor: 'var(--bg-primary)' }}>
+            <div className="px-4 py-3 space-y-3">
+              {/* Mobile Navigation Items */}
+              <div className="grid grid-cols-3 gap-2">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => onViewChange(item.id)}
+                      className={`
+                        flex flex-col items-center justify-center space-y-1 p-3 rounded-xl transition-all duration-200
+                        transform hover:scale-101 active:scale-98
+                        ${activeView === item.id ? 'font-semibold shadow-lg' : 'hover:shadow-sm'}
+                      `}
+                      style={{
+                        backgroundColor: activeView === item.id ? 'var(--color-primary-100)' : 'var(--bg-tertiary)',
+                        color: activeView === item.id ? 'var(--color-primary-600)' : 'var(--text-muted)'
+                      }}
+                    >
+                      <Icon className="w-5 h-5" aria-hidden="true" />
+                      <span className="text-xs">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
               
-              {/* Settings for mobile */}
-              <button
-                onClick={() => onViewChange('settings')}
-                className={`
-                  flex flex-col items-center space-y-1 px-3 py-2 rounded-xl transition-all duration-200
-                  transform hover:scale-101 active:scale-98
-                  ${activeView === 'settings' ? 'font-semibold' : ''}
-                `}
-                style={{
-                  backgroundColor: activeView === 'settings' ? 'var(--color-primary-100)' : 'transparent',
-                  color: activeView === 'settings' ? 'var(--color-primary-600)' : 'var(--text-muted)'
-                }}
-              >
-                <Settings className="w-5 h-5" aria-hidden="true" />
-                <span className="text-xs">Settings</span>
-              </button>
+              {/* Mobile User Actions */}
+              {user && (
+                <div className="pt-3 border-t" style={{ borderColor: 'var(--border-primary)' }}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" 
+                           style={{ background: 'var(--gradient-primary)' }}>
+                        <User className="w-5 h-5 text-white" aria-hidden="true" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium truncate max-w-[120px]" style={{ color: 'var(--text-primary)' }}>
+                          {user.email}
+                        </span>
+                        <span 
+                          className="text-xs px-2 py-0.5 rounded-full font-semibold capitalize"
+                          style={{
+                            background: 'var(--gradient-primary)',
+                            color: 'var(--text-inverse)'
+                          }}
+                        >
+                          {user.role}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-4 gap-2">
+                    {/* Export */}
+                    <button
+                      className="flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200"
+                      style={{ backgroundColor: 'var(--bg-tertiary)' }}
+                      onClick={handleExportStudents}
+                      title="Export data"
+                    >
+                      <Download className="w-5 h-5" aria-hidden="true" />
+                      <span className="text-xs mt-1">Export</span>
+                    </button>
+                    
+                    {/* Theme Toggle */}
+                    <div className="flex flex-col items-center justify-center p-3 rounded-xl" 
+                         style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+                      <ThemeToggle />
+                      <span className="text-xs mt-1">Theme</span>
+                    </div>
+                    
+                    {/* Help */}
+                    <button
+                      className="flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200"
+                      style={{ backgroundColor: 'var(--bg-tertiary)' }}
+                      onClick={() => setShowShortcutsModal(true)}
+                      title="Help"
+                    >
+                      <HelpCircle className="w-5 h-5" aria-hidden="true" />
+                      <span className="text-xs mt-1">Help</span>
+                    </button>
+                    
+                    {/* Logout */}
+                    {onLogout && (
+                      <button
+                        className="flex flex-col items-center justify-center p-3 rounded-xl transition-all duration-200"
+                        style={{ backgroundColor: 'var(--bg-tertiary)' }}
+                        onClick={onLogout}
+                        title="Logout"
+                      >
+                        <LogOut className="w-5 h-5" aria-hidden="true" />
+                        <span className="text-xs mt-1">Logout</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </header>
 
       {/* Keyboard Shortcuts Modal */}

@@ -107,69 +107,69 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'academic', label: 'Academic History' },
+    { id: 'academic', label: 'Academic' },
     { id: 'attendance', label: 'Attendance' },
-    { id: 'alerts', label: 'Alerts & Interventions' }
+    { id: 'alerts', label: 'Alerts' }
   ];
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center space-x-4">
+      {/* Header - Responsive */}
+      <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
         <button
           onClick={onBack}
-          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors"
+          className="p-2 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition-colors self-start sm:self-auto"
         >
           <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{student.name}</h1>
-          <p className="text-gray-600 dark:text-gray-400">Student ID: {student.studentId} • {student.program}</p>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Class: {student.class} • Batch: {student.batch}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{student.name}</h1>
+          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Student ID: {student.studentId} • {student.program}</p>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Class: {student.class} • Batch: {student.batch}</p>
         </div>
-        <div className="flex items-center space-x-2 px-4 py-2 rounded-lg border" style={riskColorStyle}>
-          <RiskIcon className="w-5 h-5" />
+        <div className="flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border text-sm" style={riskColorStyle}>
+          <RiskIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           <span className="font-medium capitalize">{student.riskLevel} Risk</span>
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-black p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+      {/* Quick Stats - Responsive Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="bg-white dark:bg-black p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
           <div className="text-center">
-            <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{student.riskScore}%</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Risk Score</p>
+            <p className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">{student.riskScore}%</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Risk Score</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-black p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <div className="bg-white dark:bg-black p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
           <div className="text-center">
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{student.attendanceRate}%</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Attendance</p>
+            <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{student.attendanceRate}%</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Attendance</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-black p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <div className="bg-white dark:bg-black p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
           <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">{student.currentGPA.toFixed(2)}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Current GPA</p>
+            <p className="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">{student.currentGPA.toFixed(2)}</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Current GPA</p>
           </div>
         </div>
-        <div className="bg-white dark:bg-black p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
+        <div className="bg-white dark:bg-black p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
           <div className="text-center">
-            <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{studentAlerts.length}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Active Alerts</p>
+            <p className="text-xl sm:text-2xl font-bold text-orange-600 dark:text-orange-400">{studentAlerts.length}</p>
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Active Alerts</p>
           </div>
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs - Responsive */}
       <div className="bg-white dark:bg-black rounded-lg shadow-sm border border-gray-200 dark:border-gray-800">
-        <div className="border-b border-gray-200 dark:border-gray-800">
-          <nav className="flex space-x-8 px-6">
+        <div className="border-b border-gray-200 dark:border-gray-800 overflow-x-auto">
+          <nav className="flex space-x-6 sm:space-x-8 px-4 sm:px-6">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-sm sm:text-base transition-colors whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                     : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-gray-600'
@@ -181,24 +181,24 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
           </nav>
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h3>
                 <div className="space-y-3">
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{student.email}</span>
+                    <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base break-all">{student.email}</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{student.phone}</span>
+                    <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">{student.phone}</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-gray-400" />
+                    <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
                     <div>
-                      <span className="text-gray-700 dark:text-gray-300">Mentor: {student.mentorEmail}</span>
+                      <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">Mentor: {student.mentorEmail}</span>
                     </div>
                   </div>
                 </div>
@@ -206,12 +206,12 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                 <h4 className="text-md font-semibold text-gray-900 dark:text-white mt-6 mb-3">Parent Contact</h4>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{student.parentEmail}</span>
+                    <Mail className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">{student.parentEmail}</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-700 dark:text-gray-300">{student.parentPhone}</span>
+                    <Phone className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">{student.parentPhone}</span>
                   </div>
                 </div>
               </div>
@@ -220,10 +220,10 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Risk Factors</h3>
                 <div className="space-y-3">
                   {student.riskFactors.map((factor, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                      <span className="text-gray-700 dark:text-gray-300">{factor.factor}</span>
+                    <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-900 rounded-lg">
+                      <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base mb-2 sm:mb-0">{factor.factor}</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{Math.round(factor.weight * 100)}% weight</span>
+                        <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{Math.round(factor.weight * 100)}% weight</span>
                         <span className="px-2 py-1 text-xs rounded"
                           style={{
                             backgroundColor: factor.severity === 'high' ? 'var(--color-danger-bg-dark, #fee2e2)' :
@@ -251,18 +251,18 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-800">
-                      <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Subject</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Current Grade</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Attempts</th>
-                      <th className="text-left py-3 px-4 font-medium text-gray-900 dark:text-white">Status</th>
+                      <th className="text-left py-2 px-3 sm:py-3 sm:px-4 font-medium text-gray-900 dark:text-white text-sm sm:text-base">Subject</th>
+                      <th className="text-left py-2 px-3 sm:py-3 sm:px-4 font-medium text-gray-900 dark:text-white text-sm sm:text-base">Grade</th>
+                      <th className="text-left py-2 px-3 sm:py-3 sm:px-4 font-medium text-gray-900 dark:text-white text-sm sm:text-base">Attempts</th>
+                      <th className="text-left py-2 px-3 sm:py-3 sm:px-4 font-medium text-gray-900 dark:text-white text-sm sm:text-base">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
                     {student.subjects.map((subject) => (
                       <tr key={subject.name}>
-                        <td className="py-3 px-4 text-gray-900 dark:text-gray-300">{subject.name}</td>
-                        <td className="py-3 px-4">
-                          <span className="font-medium"
+                        <td className="py-2 px-3 sm:py-3 sm:px-4 text-gray-900 dark:text-gray-300 text-sm sm:text-base">{subject.name}</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4">
+                          <span className="font-medium text-sm sm:text-base"
                             style={{
                               color: subject.grade >= 80 ? 'var(--color-success-dark, #059669)' :
                                      subject.grade >= 60 ? 'var(--color-warning-dark, #d97706)' :
@@ -272,9 +272,9 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                             {subject.grade.toFixed(1)}%
                           </span>
                         </td>
-                        <td className="py-3 px-4 text-gray-600 dark:text-gray-400">{subject.attempts}/3</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-1 text-xs rounded-full"
+                        <td className="py-2 px-3 sm:py-3 sm:px-4 text-gray-600 dark:text-gray-400 text-sm sm:text-base">{subject.attempts}/3</td>
+                        <td className="py-2 px-3 sm:py-3 sm:px-4">
+                          <span className="px-2 py-1 text-xs sm:text-sm rounded-full"
                             style={{
                               backgroundColor: subject.status === 'passing' ? 'var(--color-success-bg-dark, #d1fae5)' :
                                              subject.status === 'warning' ? 'var(--color-warning-bg-dark, #fef3c7)' :
@@ -299,24 +299,24 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Attendance Record</h3>
               <div className="mb-4">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 space-y-3 sm:space-y-0">
                   <h4 className="text-md font-medium text-gray-700 dark:text-gray-300">Overall Attendance: {student.attendanceRate}%</h4>
                   <div className="flex items-center space-x-4 text-sm">
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-green-100 dark:bg-green-900/50 rounded"></div>
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-green-100 dark:bg-green-900/50 rounded"></div>
                       <span className="text-gray-600 dark:text-gray-400">Present ({Math.round(student.attendanceRate)}%)</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-red-100 dark:bg-red-900/50 rounded"></div>
+                      <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-100 dark:bg-red-900/50 rounded"></div>
                       <span className="text-gray-600 dark:text-gray-400">Absent ({Math.round(100 - student.attendanceRate)}%)</span>
                     </div>
                   </div>
                 </div>
               </div>
               
-              <div className="grid grid-cols-7 gap-2 mb-4">
-                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 py-2">
+              <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-4">
+                {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day) => (
+                  <div key={day} className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 py-1 sm:py-2">
                     {day}
                   </div>
                 ))}
@@ -327,7 +327,7 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
                   return (
                     <div
                       key={i}
-                      className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium ${
+                      className={`w-6 h-6 sm:w-8 sm:h-8 rounded flex items-center justify-center text-xs font-medium ${
                         isPresent ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200'
                       }`}
                     >
@@ -345,28 +345,28 @@ const StudentDetail: React.FC<StudentDetailProps> = ({ studentId, onBack }) => {
               <div className="space-y-4">
                 {studentAlerts.map((alert) => (
                   <div key={alert.id} className="border border-gray-200 dark:border-gray-800 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div className={`p-1 rounded ${getRiskColor(alert.severity)}`}>
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 space-y-2 sm:space-y-0">
+                      <div className="flex items-start space-x-2">
+                        <div className={`p-1 rounded mt-0.5 ${getRiskColor(alert.severity)}`}>
                           <AlertTriangle className="w-4 h-4" />
                         </div>
                         <div>
-                          <h4 className="font-medium text-gray-900 dark:text-white">{alert.title}</h4>
+                          <h4 className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">{alert.title}</h4>
                           <p className="text-sm text-gray-600 dark:text-gray-400">{alert.message}</p>
                         </div>
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                         {new Date(alert.timestamp).toLocaleDateString()}
                       </span>
                     </div>
                     
                     {alert.interventions && alert.interventions.length > 0 && (
-                      <div className="mt-3 pl-6">
+                      <div className="mt-3 pl-0 sm:pl-6">
                         <h5 className="text-sm font-medium text-gray-900 dark:text-white mb-2">Interventions:</h5>
                         <ul className="space-y-1">
                           {alert.interventions.map((intervention, index) => (
-                            <li key={index} className="text-sm text-gray-600 dark:text-gray-400 flex items-center space-x-2">
-                              <Calendar className="w-3 h-3" />
+                            <li key={index} className="text-sm text-gray-600 dark:text-gray-400 flex items-start space-x-2">
+                              <Calendar className="w-3 h-3 mt-1 flex-shrink-0" />
                               <span>{intervention}</span>
                             </li>
                           ))}

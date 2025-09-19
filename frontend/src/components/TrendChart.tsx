@@ -99,14 +99,14 @@ const TrendChart: React.FC = () => {
   const highRiskTrend = trendData.highRisk[trendData.highRisk.length - 1] - trendData.highRisk[0];
   const mediumRiskTrend = trendData.mediumRisk[trendData.mediumRisk.length - 1] - trendData.mediumRisk[0];
 
-  // Chart dimensions and positioning
+  // Chart dimensions and positioning - responsive
   const chartConfig = {
-    width: 580,
-    height: 200,
-    marginLeft: 120,
-    marginTop: 60,
-    marginRight: 100,
-    marginBottom: 60
+    width: window.innerWidth < 640 ? 300 : window.innerWidth < 1024 ? 450 : 580,
+    height: window.innerWidth < 640 ? 150 : 200,
+    marginLeft: window.innerWidth < 640 ? 60 : 120,
+    marginTop: window.innerWidth < 640 ? 40 : 60,
+    marginRight: window.innerWidth < 640 ? 40 : 100,
+    marginBottom: window.innerWidth < 640 ? 40 : 60
   };
 
   // Generate chart points with perfect alignment
@@ -203,82 +203,95 @@ const TrendChart: React.FC = () => {
   const visibleHighRiskPoints = getVisiblePoints(highRiskPoints, animationProgress);
   const visibleMediumRiskPoints = getVisiblePoints(mediumRiskPoints, animationProgress);
 
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render to update chart dimensions
+      window.location.reload();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="glass-morphism p-6 rounded-2xl shadow-glass animate-fade-in">
+    <div className="glass-morphism p-4 sm:p-6 rounded-2xl shadow-glass animate-fade-in">
       {/* Header Section with Period Selector */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between mb-6 space-y-4 lg:space-y-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-3 sm:space-y-0">
         <div>
           <h3 className="text-heading-3 font-semibold transition-smooth" style={{ color: 'var(--text-primary)' }}>
             Risk Level Trends
           </h3>
-          <p className="text-body-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+          <p className="text-body-xs sm:text-body-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
             {selectedPeriod === '8weeks' ? 'Weekly progression' : 
              selectedPeriod === '6months' ? 'Monthly progression' : 'Quarterly progression'} of at-risk students
           </p>
         </div>
         
-        {/* Interactive Period Selector */}
-        <div className="flex items-center space-x-2 p-1 rounded-xl" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
-          {periods.map((period) => {
-            const Icon = period.icon;
-            const isActive = selectedPeriod === period.id;
-            return (
-              <button
-                key={period.id}
-                onClick={() => setSelectedPeriod(period.id)}
-                className={`
-                  flex items-center space-x-2 px-4 py-2 rounded-lg transition-smooth
-                  transform hover:scale-101 active:scale-99
-                  ${
-                    isActive 
-                      ? 'shadow-glass font-medium' 
-                      : 'hover:shadow-sm opacity-90 hover:opacity-100'
-                  }
-                `}
-                style={{
-                  backgroundColor: isActive ? 'var(--color-primary-100)' : 'transparent',
-                  color: isActive ? 'var(--color-primary-600)' : 'var(--text-muted)'
-                }}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="text-body-sm">{period.label}</span>
-              </button>
-            );
-          })}
+        {/* Interactive Period Selector - Responsive */}
+        <div className="flex overflow-x-auto pb-2 -mx-1 sm:mx-0 sm:pb-0">
+          <div className="flex items-center space-x-1 sm:space-x-2 p-1 rounded-xl" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
+            {periods.map((period) => {
+              const Icon = period.icon;
+              const isActive = selectedPeriod === period.id;
+              return (
+                <button
+                  key={period.id}
+                  onClick={() => setSelectedPeriod(period.id)}
+                  className={`
+                    flex items-center space-x-1 sm:space-x-2 px-2 py-1.5 sm:px-4 sm:py-2 rounded-lg transition-smooth
+                    transform hover:scale-101 active:scale-99 whitespace-nowrap
+                    ${
+                      isActive 
+                        ? 'shadow-glass font-medium' 
+                        : 'hover:shadow-sm opacity-90 hover:opacity-100'
+                    }
+                  `}
+                  style={{
+                    backgroundColor: isActive ? 'var(--color-primary-100)' : 'transparent',
+                    color: isActive ? 'var(--color-primary-600)' : 'var(--text-muted)'
+                  }}
+                >
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span className="text-body-xs sm:text-body-sm">{period.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Legend and Trend Indicators */}
-      <div className="flex flex-wrap items-center justify-between mb-6">
-        <div className="flex items-center space-x-6">
+      <div className="flex flex-wrap items-center justify-between mb-4 sm:mb-6">
+        <div className="flex items-center space-x-4 sm:space-x-6 mb-2 sm:mb-0">
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 rounded-full" style={{ background: 'var(--gradient-secondary)' }}></div>
-            <span className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>High Risk</span>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full" style={{ background: 'var(--gradient-secondary)' }}></div>
+            <span className="text-body-xs sm:text-body-sm" style={{ color: 'var(--text-secondary)' }}>High Risk</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 rounded-full" style={{ background: 'var(--gradient-success)' }}></div>
-            <span className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>Medium Risk</span>
+            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full" style={{ background: 'var(--gradient-success)' }}></div>
+            <span className="text-body-xs sm:text-body-sm" style={{ color: 'var(--text-secondary)' }}>Medium Risk</span>
           </div>
         </div>
         
         {/* Real-time Trend Indicators */}
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             {highRiskTrend > 0 ? 
-              <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-danger-dark, #ef4444)' }} /> : 
-              <TrendingDown className="w-4 h-4" style={{ color: 'var(--color-success-dark, #10b981)' }} />
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: 'var(--color-danger-dark, #ef4444)' }} /> : 
+              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: 'var(--color-success-dark, #10b981)' }} />
             }
-            <span className={`text-body-sm font-medium`}
+            <span className={`text-body-xs sm:text-body-sm font-medium`}
                   style={{ color: highRiskTrend > 0 ? 'var(--color-danger-dark, #dc2626)' : 'var(--color-success-dark, #059669)' }}>
               {Math.abs(highRiskTrend)} {highRiskTrend > 0 ? '↑' : '↓'}
             </span>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             {mediumRiskTrend > 0 ? 
-              <TrendingUp className="w-4 h-4" style={{ color: 'var(--color-warning-dark, #f59e0b)' }} /> : 
-              <TrendingDown className="w-4 h-4" style={{ color: 'var(--color-success-dark, #10b981)' }} />
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: 'var(--color-warning-dark, #f59e0b)' }} /> : 
+              <TrendingDown className="w-3 h-3 sm:w-4 sm:h-4" style={{ color: 'var(--color-success-dark, #10b981)' }} />
             }
-            <span className={`text-body-sm font-medium`}
+            <span className={`text-body-xs sm:text-body-sm font-medium`}
                   style={{ color: mediumRiskTrend > 0 ? 'var(--color-warning-dark, #d97706)' : 'var(--color-success-dark, #059669)' }}>
               {Math.abs(mediumRiskTrend)} {mediumRiskTrend > 0 ? '↑' : '↓'}
             </span>
@@ -286,9 +299,12 @@ const TrendChart: React.FC = () => {
         </div>
       </div>
 
-      {/* Animated SVG Chart */}
-      <div className="relative h-80">
-        <svg className="w-full h-full" viewBox="0 0 800 340">
+      {/* Animated SVG Chart - Responsive */}
+      <div className="relative h-64 sm:h-80">
+        <svg 
+          className="w-full h-full" 
+          viewBox={`0 0 ${chartConfig.width + chartConfig.marginLeft + chartConfig.marginRight} ${chartConfig.height + chartConfig.marginTop + chartConfig.marginBottom}`}
+        >
           {/* Gradient Definitions */}
           <defs>
             <linearGradient id="highRiskGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -384,7 +400,7 @@ const TrendChart: React.FC = () => {
               d={mediumRiskPath}
               fill="none"
               stroke="#f59e0b"
-              strokeWidth="3"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
               filter="url(#shadow)"
@@ -396,7 +412,7 @@ const TrendChart: React.FC = () => {
               d={highRiskPath}
               fill="none"
               stroke="#ef4444"
-              strokeWidth="3"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
               filter="url(#shadow)"
@@ -409,17 +425,17 @@ const TrendChart: React.FC = () => {
               <circle
                 cx={point.x}
                 cy={point.y}
-                r="8"
+                r="6"
                 fill="#f59e0b"
                 stroke="var(--bg-primary)"
-                strokeWidth="3"
+                strokeWidth="2"
                 filter="url(#shadow)"
-                className="cursor-pointer transition-all duration-200 hover:r-10"
+                className="cursor-pointer transition-all duration-200 hover:r-8"
               />
               <circle
                 cx={point.x}
                 cy={point.y}
-                r="4"
+                r="3"
                 fill="#fff"
                 opacity="0.9"
               />
@@ -433,17 +449,17 @@ const TrendChart: React.FC = () => {
               <circle
                 cx={point.x}
                 cy={point.y}
-                r="8"
+                r="6"
                 fill="#ef4444"
                 stroke="var(--bg-primary)"
-                strokeWidth="3"
+                strokeWidth="2"
                 filter="url(#shadow)"
-                className="cursor-pointer transition-all duration-200 hover:r-10"
+                className="cursor-pointer transition-all duration-200 hover:r-8"
               />
               <circle
                 cx={point.x}
                 cy={point.y}
-                r="4"
+                r="3"
                 fill="#fff"
                 opacity="0.9"
               />
@@ -458,7 +474,7 @@ const TrendChart: React.FC = () => {
               <text
                 key={label}
                 x={point.x}
-                y={chartConfig.marginTop + chartConfig.height + 25}
+                y={chartConfig.marginTop + chartConfig.height + 20}
                 textAnchor="middle"
                 className="text-xs font-medium"
                 style={{ fill: 'var(--text-muted)' }}
